@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- head same as previous -->
+  <title>Student Dashboard</title>
+  <link ...>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="sidebar-brand">EduPlatform</div>
+    <nav class="nav flex-column">
+      <a class="nav-link active" href="#"><i class="fas fa-home"></i> Dashboard</a>
+      <a class="nav-link" href="my-courses.html"><i class="fas fa-book"></i> My Courses</a>
+      <a class="nav-link" href="#"><i class="fas fa-user"></i> Profile</a>
+      <a class="nav-link" href="#"><i class="fas fa-credit-card"></i> Payments</a>
+      <a class="nav-link" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <div class="banner">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h2>Learn Effectively With Us!</h2>
+          <p>Get 30% off every course in January. Start your learning journey today.</p>
+          <div class="d-flex gap-3 mt-3">
+            <div class="stat-pill"><i class="fas fa-graduation-cap"></i> 75,000+ Students</div>
+            <div class="stat-pill"><i class="fas fa-user-tie"></i> 200+ Expert Mentors</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-4"><div class="card text-center"><h5>Active Courses</h5><h2>5</h2></div></div>
+      <div class="col-md-4"><div class="card text-center"><h5>Completed</h5><h2>3</h2></div></div>
+      <div class="col-md-4"><div class="card text-center"><h5>Certificates</h5><h2>1</h2></div></div>
+    </div>
+
+    <!-- Popular / Enrolled Courses section similar to screenshot -->
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>checkAuth();</script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduPlatform - Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --sidebar-bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #22d3ee;
+      --accent-dark: #0891b2;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      background: #020817;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .sidebar {
+      background: var(--sidebar-bg);
+      width: 260px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding-top: 1.5rem;
+      border-right: 1px solid #334155;
+      overflow-y: auto;
+    }
+
+    .sidebar .nav-link {
+      color: #cbd5e1;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      margin: 0.25rem 1rem;
+      transition: all 0.2s;
+    }
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background: #1e293b;
+      color: white;
+    }
+
+    .sidebar .nav-link i {
+      width: 24px;
+      text-align: center;
+      margin-right: 12px;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+
+    .top-banner {
+      background: linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .top-banner h2 {
+      font-weight: 700;
+      font-size: 2.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .top-banner p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+      max-width: 520px;
+    }
+
+    .stat-pill {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      border-radius: 999px;
+      padding: 0.6rem 1.4rem;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: none;
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .course-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #64748b, #475569);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .instructor-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: #cbd5e1;
+    }
+
+    .btn-create {
+      background: white;
+      color: #0f172a;
+      font-weight: 600;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 999px;
+    }
+
+    .btn-create:hover {
+      background: #f1f5f9;
+    }
+
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="px-4 pb-4">
+      <h4 class="text-white fw-bold mb-4">EduPlatform</h4>
+    </div>
+    <nav class="nav flex-column">
+      <a class="nav-link active" href="#"><i class="fas fa-home"></i> Dashboard</a>
+      <a class="nav-link" href="#"><i class="fas fa-book"></i> Courses</a>
+      <a class="nav-link" href="#"><i class="fas fa-users"></i> Students</a>
+      <a class="nav-link" href="#"><i class="fas fa-chalkboard-teacher"></i> Instructors</a>
+      <a class="nav-link" href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+      <a class="nav-link" href="#"><i class="fas fa-comments"></i> Discussions</a>
+      <a class="nav-link" href="#"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Top Banner -->
+    <div class="top-banner">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h2>Learn Effectively With Us!</h2>
+          <p>Get 30% off every course in January. Start your learning journey today.</p>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <div class="stat-pill d-flex align-items-center gap-2">
+              <span style="font-size:1.6rem">🎓</span> 75,000+ Students
+            </div>
+            <div class="stat-pill d-flex align-items-center gap-2">
+              <span style="font-size:1.6rem">👨‍🏫</span> 200+ Expert Mentors
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+          <button class="btn btn-create btn-lg shadow">
+            <i class="fas fa-plus me-2"></i> Create New Course
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="card text-center p-4">
+          <h5 class="text-muted mb-3">Courses in Progress</h5>
+          <h2 class="fw-bold">5</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center p-4">
+          <h5 class="text-muted mb-3">Forum Discussions</h5>
+          <h2 class="fw-bold">25</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center p-4">
+          <h5 class="text-muted mb-3">Total Enrollments</h5>
+          <h2 class="fw-bold">450K+</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Sections -->
+    <div class="row g-4">
+
+      <!-- Popular Courses -->
+      <div class="col-lg-4">
+        <h5 class="section-title">Popular Courses</h5>
+        <div class="card p-4">
+          <div class="d-flex align-items-center gap-4 mb-4">
+            <div class="course-icon">U</div>
+            <div>
+              <h5 class="mb-1">UI/UX Design</h5>
+              <p class="text-muted mb-0">30+ Courses</p>
+            </div>
+            <button class="btn btn-sm btn-outline-light ms-auto">View Courses</button>
+          </div>
+
+          <div class="d-flex align-items-center gap-4 mb-4">
+            <div class="course-icon">M</div>
+            <div>
+              <h5 class="mb-1">Marketing</h5>
+              <p class="text-muted mb-0">25+ Courses</p>
+            </div>
+            <button class="btn btn-sm btn-outline-light ms-auto">View Courses</button>
+          </div>
+
+          <div class="d-flex align-items-center gap-4 mb-4">
+            <div class="course-icon">W</div>
+            <div>
+              <h5 class="mb-1">Web Development</h5>
+              <p class="text-muted mb-0">30+ Courses</p>
+            </div>
+            <button class="btn btn-sm btn-outline-light ms-auto">View Courses</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Activity -->
+      <div class="col-lg-4">
+        <h5 class="section-title">Current Activity</h5>
+        <div class="card p-4 text-center">
+          <h5 class="mb-4">Monthly Progress</h5>
+          <p class="text-muted mb-4">This is the latest improvement</p>
+          <!-- Placeholder for chart -->
+          <div style="height: 200px; background: linear-gradient(to top, #334155, #1e293b); border-radius: 1rem; display: flex; align-items: center; justify-content: center;">
+            <p class="text-muted">[ Progress Chart Placeholder ]</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Best Instructors -->
+      <div class="col-lg-4">
+        <h5 class="section-title">Best Instructors</h5>
+        <div class="card p-4">
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="instructor-avatar" alt="Instructor">
+            <div>
+              <h5 class="mb-1">Nil Yeager</h5>
+              <p class="text-muted mb-0">5 Design Courses</p>
+            </div>
+            <button class="btn btn-sm btn-outline-light ms-auto">Courses</button>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="instructor-avatar" alt="Instructor">
+            <div>
+              <h5 class="mb-1">Theron Trump</h5>
+              <p class="text-muted mb-0">5 Design Courses</p>
+            </div>
+            <button class="btn btn-sm btn-outline-light ms-auto">Courses</button>
+          </div>
+
+          <div class="d-flex align-items-center gap-3">
+            <img src="https://randomuser.me/api/portraits/men/65.jpg" class="instructor-avatar" alt="Instructor">
+            <div>
+              <h5 class="mb-1">Tyler Mark</h5>
+              <p class="text-muted mb-0">5 Design Courses</p>
+            </div>
+            <button class="btn btn-sm btn-outline-light ms-auto">Courses</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Stats -->
+    <div class="row g-4 mt-5">
+      <div class="col-lg-6">
+        <h5 class="section-title">Top 5 School Performance</h5>
+        <div class="card p-4">
+          <div style="height: 280px; background: #1e293b; border-radius: 1rem; display: flex; align-items: center; justify-content: center;">
+            <p class="text-muted">[ Bar Chart Placeholder ]</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <h5 class="section-title">Overall Pass %</h5>
+        <div class="card p-4 text-center">
+          <div style="height: 280px; background: #1e293b; border-radius: 1rem; display: flex; align-items: center; justify-content: center;">
+            <p class="text-muted">[ Donut Chart Placeholder ]</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <h5 class="section-title">Content Usage</h5>
+        <div class="card p-4 text-center">
+          <div style="height: 280px; background: #1e293b; border-radius: 1rem; display: flex; align-items: center; justify-content: center;">
+            <p class="text-muted">[ Line Chart Placeholder ]</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
