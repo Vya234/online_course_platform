@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile - Shiksharthee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'DM Sans', sans-serif;
+            background: #f8f9fa;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #0a3d4a;
+            padding: 1.2rem 5%;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        /* Profile Card */
+        .profile-container {
+            max-width: 720px;
+            margin: 4rem auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd966, #f4a945);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0a3d4a;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0a3d4a;
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Details */
+        .profile-details {
+            margin-top: 2.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #0a3d4a;
+        }
+
+        .detail-value {
+            color: #444;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2.5rem;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back {
+            background: #1a5f6f;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #0a3d4a;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background: #b52a37;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo">Shiksharthee</div>
+    <div>Analyst Profile</div>
+</div>
+
+<!-- Profile -->
+<div class="profile-container">
+
+    <div class="profile-header">
+        <div class="avatar" id="avatar">--</div>
+        <div class="profile-name" id="name">Loading...</div>
+        <div class="profile-email" id="email">Loading...</div>
+    </div>
+
+    <div class="profile-details">
+        <div class="detail-item">
+            <span class="detail-label">Username (Email)</span>
+            <span class="detail-value" id="username">Loading...</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Qualifications</span>
+            <span class="detail-value" id="qualification">Loading...</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Member Since</span>
+            <span class="detail-value" id="memberSince">Loading...</span>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="analyst-dashboard.html" class="btn btn-back">← Back to Dashboard</a>
+        <button class="btn btn-logout" onclick="logout()">Logout</button>
+    </div>
+
+</div>
+
+<script>
+    /* ===============================
+       FETCH USER DATA (BACKEND READY)
+       =============================== */
+
+    async function loadUserProfile() {
+        try {
+            /*
+             EXPECTED BACKEND RESPONSE FORMAT:
+             {
+               "name": "Ananya K",
+               "email": "ananya.k@shiksharthee.com",
+               "qualification": "M.Tech – Data Analytics",
+               "memberSince": "March 2023"
+             }
+            */
+
+            // 🔴 Replace URL later
+            // const response = await fetch('/api/user/profile', {
+            //     headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+            // });
+            // const user = await response.json();
+
+            // Temporary static fallback (REMOVE when backend is ready)
+            const user = {
+                name: "Ananya K",
+                email: "ananya.k@shiksharthee.com",
+                qualification: "M.Tech – Data Analytics",
+                memberSince: "March 2023"
+            };
+
+            document.getElementById('name').textContent = user.name;
+            document.getElementById('email').textContent = user.email;
+            document.getElementById('username').textContent = user.email;
+            document.getElementById('qualification').textContent = user.qualification;
+            document.getElementById('memberSince').textContent = user.memberSince;
+
+            // Avatar initials
+            const initials = user.name
+                .split(' ')
+                .map(w => w[0])
+                .join('')
+                .toUpperCase();
+            document.getElementById('avatar').textContent = initials;
+
+        } catch (error) {
+            console.error("Failed to load profile", error);
+            alert("Unable to load profile data.");
+        }
+    }
+
+    /* ===============================
+       LOGOUT
+       =============================== */
+    function logout() {
+        // Clear auth data
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        // Redirect to login
+        window.location.href = 'login.html';
+    }
+
+    // Load profile on page load
+    document.addEventListener('DOMContentLoaded', loadUserProfile);
+</script>
+
+</body>
+</html>

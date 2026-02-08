@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Shiksharthee</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0a3d4a;
+            --primary-teal: #1a5f6f;
+            --accent-gold: #f4a945;
+            --accent-coral: #ff8b7b;
+            --accent-yellow: #ffd966;
+            --light-teal: #7ec4c4;
+            --bg-gradient-start: #0a3d4a;
+            --bg-gradient-end: #7ec4c4;
+            --text-white: #ffffff;
+            --text-dark: #1a1a1a;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: rgba(26, 95, 111, 0.2);
+            --bg-light: #f8f9fa;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background: var(--primary-dark);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-white);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-gold);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border: none;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--text-white);
+            border: 2px solid var(--text-white);
+        }
+
+        .btn-login:hover {
+            background: var(--text-white);
+            color: var(--primary-dark);
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-white);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--primary-teal) 50%, var(--bg-gradient-end) 100%);
+            padding: 3rem 5%;
+            color: var(--text-white);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        /* Filters Section */
+        .filters-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: -2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-select,
+        .filter-input {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 3px rgba(26, 95, 111, 0.1);
+        }
+
+        .apply-filters-btn {
+            background: linear-gradient(135deg, var(--primary-teal), var(--light-teal));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: fit-content;
+        }
+
+        .apply-filters-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(26, 95, 111, 0.3);
+        }
+
+        /* Main Dashboard */
+        .dashboard-main {
+            padding: 3rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-teal);
+        }
+
+        .stat-card:nth-child(1)::before { background: var(--success-color); }
+        .stat-card:nth-child(2)::before { background: var(--info-color); }
+        .stat-card:nth-child(3)::before { background: var(--warning-color); }
+        .stat-card:nth-child(4)::before { background: var(--accent-coral); }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .stat-icon.enrollments { background: rgba(40, 167, 69, 0.1); color: var(--success-color); }
+        .stat-icon.active { background: rgba(23, 162, 184, 0.1); color: var(--info-color); }
+        .stat-icon.completion { background: rgba(255, 193, 7, 0.1); color: var(--warning-color); }
+        .stat-icon.time { background: rgba(255, 139, 123, 0.1); color: var(--accent-coral); }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .stat-change.positive {
+            color: var(--success-color);
+        }
+
+        .stat-change.negative {
+            color: var(--danger-color);
+        }
+
+        .stat-change.neutral {
+            color: #666;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--card-border);
+        }
+
+        .chart-header {
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Detailed Analytics */
+        .detailed-analytics {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--card-border);
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .export-btn {
+            background: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #e09935;
+            transform: translateY(-2px);
+        }
+
+        .analytics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .analytics-table th,
+        .analytics-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .analytics-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .analytics-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Loading State */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary-teal);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 3%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .dashboard-header {
+                padding: 2rem 3%;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+
+            .dashboard-main {
+                padding: 2rem 3%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .chart-card {
+                padding: 1.5rem;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+        .profile-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd966, #f4a945);
+            color: #0a3d4a;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+.profile-circle:hover {
+    transform: scale(1.1);
+}
+
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card,
+        .chart-card,
+        .detailed-analytics {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .chart-card:nth-child(1) { animation-delay: 0.5s; }
+        .chart-card:nth-child(2) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo-section">
+            <div class="logo-icon">🎓</div>
+            <span class="logo-text">Shiksharthee</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="analytics.html" class="active">Analytics</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+        </ul>
+        <div class="profile-circle" onclick="window.location.href='analyst-profile.html'">
+            AK
+        </div>
+
+
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="header-content">
+            <h1 class="dashboard-title">Analytics Dashboard</h1>
+            <p class="dashboard-subtitle">Comprehensive platform statistics and insights</p>
+            
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Course</label>
+                        <select class="filter-select" id="courseFilter">
+                            <option value="">All Courses</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="business">Business Administration</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="arts">Arts & Humanities</option>
+                            <option value="science">Life Sciences</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">University</label>
+                        <select class="filter-select" id="universityFilter">
+                            <option value="">All Universities</option>
+                            <option value="mit">MIT</option>
+                            <option value="stanford">Stanford University</option>
+                            <option value="harvard">Harvard University</option>
+                            <option value="berkeley">UC Berkeley</option>
+                            <option value="oxford">Oxford University</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Date Range</label>
+                        <select class="filter-select" id="dateFilter">
+                            <option value="7days">Last 7 Days</option>
+                            <option value="30days">Last 30 Days</option>
+                            <option value="90days">Last 3 Months</option>
+                            <option value="1year">Last Year</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <button class="apply-filters-btn" onclick="applyFilters()">
+                            <span id="filterBtnText">Apply Filters</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard-main">
+        <!-- Statistics Cards -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon enrollments">👥</div>
+                </div>
+                <div class="stat-value" id="totalEnrollments">25,847</div>
+                <div class="stat-label">Total Enrollments</div>
+                <div class="stat-change positive">
+                    <span>↗</span>
+                    <span>+12.5% from last month</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon active">📚</div>
+                </div>
+                <div class="stat-value" id="activeEnrollments">18,245</div>
+                <div class="stat-label">Active Enrollments</div>
+                <div class="stat-change positive">
+                    <span>↗</span>
+                    <span>+8.3% from last month</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon completion">🎯</div>
+                </div>
+                <div class="stat-value" id="completionRate">78.5%</div>
+                <div class="stat-label">Completion Rate</div>
+                <div class="stat-change positive">
+                    <span>↗</span>
+                    <span>+3.2% from last month</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon time">⏱️</div>
+                </div>
+                <div class="stat-value" id="avgCompletionTime">4.2</div>
+                <div class="stat-label">Avg Completion Time (months)</div>
+                <div class="stat-change negative">
+                    <span>↘</span>
+                    <span>-0.3 months from last period</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <!-- Enrollments Over Time -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Enrollments Over Time</h3>
+                    <p class="chart-subtitle">Monthly enrollment trends</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="enrollmentChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Completion Rate by Course -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Completion Rate by Course</h3>
+                    <p class="chart-subtitle">Course performance comparison</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="completionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Analytics Table -->
+        <section class="detailed-analytics">
+            <div class="analytics-header">
+                <h3 class="analytics-title">Detailed Course Analytics</h3>
+                <button class="export-btn" onclick="exportData()">
+                    📊 Export Data
+                </button>
+            </div>
+            <table class="analytics-table">
+                <thead>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>University</th>
+                        <th>Total Enrollments</th>
+                        <th>Active Students</th>
+                        <th>Completion Rate</th>
+                        <th>Avg Time</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody id="analyticsTableBody">
+                    <tr>
+                        <td>Introduction to Computer Science</td>
+                        <td>MIT</td>
+                        <td>1,245</td>
+                        <td>892</td>
+                        <td>84.2%</td>
+                        <td>3.8 months</td>
+                        <td>4.8/5</td>
+                    </tr>
+                    <tr>
+                        <td>Business Analytics</td>
+                        <td>Stanford</td>
+                        <td>987</td>
+                        <td>723</td>
+                        <td>76.5%</td>
+                        <td>4.1 months</td>
+                        <td>4.6/5</td>
+                    </tr>
+                    <tr>
+                        <td>Machine Learning Fundamentals</td>
+                        <td>Berkeley</td>
+                        <td>1,567</td>
+                        <td>1,134</td>
+                        <td>72.3%</td>
+                        <td>5.2 months</td>
+                        <td>4.9/5</td>
+                    </tr>
+                    <tr>
+                        <td>Digital Marketing</td>
+                        <td>Harvard</td>
+                        <td>2,341</td>
+                        <td>1,789</td>
+                        <td>81.7%</td>
+                        <td>3.5 months</td>
+                        <td>4.7/5</td>
+                    </tr>
+                    <tr>
+                        <td>Data Science Bootcamp</td>
+                        <td>Oxford</td>
+                        <td>876</td>
+                        <td>654</td>
+                        <td>74.7%</td>
+                        <td>6.1 months</td>
+                        <td>4.8/5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        // Sample data - this will be replaced with actual database calls
+        let analyticsData = {
+            totalEnrollments: 25847,
+            activeEnrollments: 18245,
+            completionRate: 78.5,
+            avgCompletionTime: 4.2,
+            enrollmentTrend: [
+                { month: 'Jan', enrollments: 1200, completions: 950 },
+                { month: 'Feb', enrollments: 1450, completions: 1100 },
+                { month: 'Mar', enrollments: 1650, completions: 1280 },
+                { month: 'Apr', enrollments: 1890, completions: 1450 },
+                { month: 'May', enrollments: 2100, completions: 1650 },
+                { month: 'Jun', enrollments: 2350, completions: 1890 }
+            ],
+            courseCompletion: [
+                { course: 'Computer Science', rate: 84.2 },
+                { course: 'Business', rate: 76.5 },
+                { course: 'Engineering', rate: 72.3 },
+                { course: 'Arts', rate: 81.7 },
+                { course: 'Science', rate: 74.7 }
+            ]
+        };
+
+        // Initialize Charts
+        function initializeCharts() {
+            // Enrollment Chart
+            const enrollmentCtx = document.getElementById('enrollmentChart').getContext('2d');
+            new Chart(enrollmentCtx, {
+                type: 'line',
+                data: {
+                    labels: analyticsData.enrollmentTrend.map(item => item.month),
+                    datasets: [{
+                        label: 'New Enrollments',
+                        data: analyticsData.enrollmentTrend.map(item => item.enrollments),
+                        borderColor: '#1a5f6f',
+                        backgroundColor: 'rgba(26, 95, 111, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Completions',
+                        data: analyticsData.enrollmentTrend.map(item => item.completions),
+                        borderColor: '#f4a945',
+                        backgroundColor: 'rgba(244, 169, 69, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Completion Rate Chart
+            const completionCtx = document.getElementById('completionChart').getContext('2d');
+            new Chart(completionCtx, {
+                type: 'bar',
+                data: {
+                    labels: analyticsData.courseCompletion.map(item => item.course),
+                    datasets: [{
+                        label: 'Completion Rate (%)',
+                        data: analyticsData.courseCompletion.map(item => item.rate),
+                        backgroundColor: [
+                            '#28a745',
+                            '#17a2b8',
+                            '#ffc107',
+                            '#ff8b7b',
+                            '#7ec4c4'
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Apply Filters Function
+        function applyFilters() {
+            const filterBtn = document.getElementById('filterBtnText');
+            const originalText = filterBtn.textContent;
+            
+            // Show loading state
+            filterBtn.innerHTML = '<span class="loading-spinner"></span> Loading...';
+            
+            // Get filter values
+            const courseFilter = document.getElementById('courseFilter').value;
+            const universityFilter = document.getElementById('universityFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            // Simulate API call with timeout
+            setTimeout(() => {
+                // Here you would make actual API calls to your backend
+                // For now, we'll just simulate updating the data
+                updateDashboardData(courseFilter, universityFilter, dateFilter);
+                
+                // Reset button
+                filterBtn.textContent = originalText;
+                
+                // Show success message (optional)
+                showNotification('Filters applied successfully!', 'success');
+            }, 1500);
+        }
+
+        // Update Dashboard Data
+        function updateDashboardData(course, university, dateRange) {
+            // This function will be connected to your database
+            // For now, it simulates data updates
+            
+            // Update stat cards with filtered data
+            const multiplier = Math.random() * 0.3 + 0.85; // Random variation for demo
+            
+            document.getElementById('totalEnrollments').textContent = 
+                Math.floor(analyticsData.totalEnrollments * multiplier).toLocaleString();
+            document.getElementById('activeEnrollments').textContent = 
+                Math.floor(analyticsData.activeEnrollments * multiplier).toLocaleString();
+            document.getElementById('completionRate').textContent = 
+                (analyticsData.completionRate * multiplier).toFixed(1) + '%';
+            document.getElementById('avgCompletionTime').textContent = 
+                (analyticsData.avgCompletionTime * (2 - multiplier)).toFixed(1);
+            
+            // Update table data
+            updateAnalyticsTable(course, university);
+        }
+
+        // Update Analytics Table
+        function updateAnalyticsTable(courseFilter, universityFilter) {
+            const tableBody = document.getElementById('analyticsTableBody');
+            // Here you would filter the table data based on selected filters
+            // For demo purposes, we'll just add a visual indication
+            
+            const rows = tableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                row.style.opacity = '0.5';
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                }, 300);
+            });
+        }
+
+        // Export Data Function
+        function exportData() {
+            // This will trigger data export functionality
+            showNotification('Exporting analytics data...', 'info');
+            
+            // Simulate export process
+            setTimeout(() => {
+                showNotification('Data exported successfully!', 'success');
+            }, 2000);
+        }
+
+        // Notification System
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+                color: white;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 9999;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add CSS for notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Auto-refresh data every 30 seconds
+        function startAutoRefresh() {
+            setInterval(() => {
+                // Only refresh if no filters are currently being applied
+                const filterBtn = document.getElementById('filterBtnText');
+                if (filterBtn.textContent === 'Apply Filters') {
+                    updateDashboardData('', '', 'current');
+                }
+            }, 30000);
+        }
+
+        // Initialize Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            startAutoRefresh();
+            
+            // Add smooth transitions
+            document.querySelectorAll('.stat-card, .chart-card').forEach(card => {
+                card.style.transition = 'all 0.3s ease';
+            });
+        });
+
+        // Real-time data simulation
+        function simulateRealTimeUpdates() {
+            setInterval(() => {
+                // Simulate small changes in active enrollments
+                const currentActive = parseInt(document.getElementById('activeEnrollments').textContent.replace(/,/g, ''));
+                const change = Math.floor(Math.random() * 10) - 5; // -5 to +5 change
+                const newActive = Math.max(0, currentActive + change);
+                document.getElementById('activeEnrollments').textContent = newActive.toLocaleString();
+            }, 10000); // Update every 10 seconds
+        }
+
+        // Start real-time updates
+        setTimeout(simulateRealTimeUpdates, 5000);
+    </script>
+</body>
+</html>
