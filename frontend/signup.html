@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Shiksharthee</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-dark: #0a3d4a;
+            --primary-teal: #1a5f6f;
+            --accent-teal: #2d9b9e;
+            --text-white: #ffffff;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background: var(--primary-dark);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+        }
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-white);
+            letter-spacing: 0.5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #4fc3f7;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.7rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border: none;
+        }
+        .btn-login {
+            background: #667eea;
+            color: var(--text-white);
+        }
+        .btn-signup {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-white);
+        }
+        .main-container {
+            background: linear-gradient(135deg, #0a3d4a 0%, #1a5f6f 50%, #7ec4c4 100%);
+            min-height: calc(100vh - 86px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 5%;
+        }
+        .signup-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            width: 100%;
+            align-items: center;
+        }
+        .signup-container {
+            background: rgba(13, 52, 64, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .welcome-text h2 {
+            color: var(--text-white);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .welcome-text p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--text-white);
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #4fc3f7;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .role-group {
+            margin-bottom: 1.5rem;
+        }
+        .role-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .role-option {
+            flex: 1;
+        }
+        .role-radio {
+            display: none;
+        }
+        .role-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--text-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .role-radio:checked + .role-label {
+            background: rgba(79, 195, 247, 0.2);
+            border-color: #4fc3f7;
+        }
+        .radio-circle {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .role-radio:checked + .role-label .radio-circle {
+            border-color: #4fc3f7;
+        }
+        .radio-circle::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4fc3f7;
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+        .role-radio:checked + .role-label .radio-circle::after {
+            transform: scale(1);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-teal);
+            border: none;
+            border-radius: 10px;
+            color: var(--text-white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        .submit-btn:hover {
+            background: #25868a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(45, 155, 158, 0.4);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .login-link a {
+            color: #4fc3f7;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .illustration-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @media (max-width: 968px) {
+            .signup-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .illustration-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-section">
+            <div class="logo-icon">🎓</div>
+            <span class="logo-text">Shiksharthee</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#courses">Courses</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact us</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="login.html" class="btn btn-login">Login</a>
+            <a href="signup.html" class="btn btn-signup">Signup</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="signup-wrapper">
+            <div class="signup-container">
+                <div class="welcome-text">
+                    <h2>WELCOME</h2>
+                    <p>Join us today !!</p>
+                </div>
+
+                <form id="signupForm">
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="userid" placeholder="User ID" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="name" placeholder="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-input" id="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-input" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="role-group">
+                        <div class="role-options">
+                            <div class="role-option">
+                                <input type="radio" id="student" name="role" value="student" class="role-radio" checked>
+                                <label for="student" class="role-label">
+                                    <span class="radio-circle"></span>
+                                    Student
+                                </label>
+                            </div>
+                            <div class="role-option">
+                                <input type="radio" id="instructor" name="role" value="instructor" class="role-radio">
+                                <label for="instructor" class="role-label">
+                                    <span class="radio-circle"></span>
+                                    Instructor
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Signup</button>
+                </form>
+
+                <div class="login-link">
+                    Already have an account? <a href="login.html">login</a>
+                </div>
+            </div>
+
+            <div class="illustration-container">
+                <div style="font-size: 15rem; opacity: 0.3;">🎓</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const userid = document.getElementById('userid').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            const user = {
+                userid: userid,
+                name: name,
+                email: email,
+                password: password,
+                role: role,
+                enrolledCourses: [],
+                createdAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('user_' + userid, JSON.stringify(user));
+
+            alert('Signup successful! Please login with your credentials.');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
