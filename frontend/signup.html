@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup - Shiksharthee</title>
+    <title>Signup - LearnX</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -237,6 +237,419 @@
             justify-content: center;
             align-items: center;
         }
+
+        .illustration {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 450px;
+        }
+
+        /* Background Wall */
+        .wall-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 20px;
+        }
+
+        /* Study Desk */
+        .study-desk {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .desk-surface {
+            width: 480px;
+            height: 20px;
+            background: linear-gradient(180deg, #8b6f47, #6b5434);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .desk-drawer {
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(180deg, #6b5434, #4a3a24);
+            position: absolute;
+            bottom: -60px;
+            right: 30px;
+            border-radius: 4px;
+        }
+
+        .desk-drawer::before {
+            content: '';
+            width: 60px;
+            height: 8px;
+            background: #3a2a14;
+            border-radius: 4px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Monitor */
+        .monitor {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .monitor-screen {
+            width: 200px;
+            height: 130px;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            border: 6px solid #2d2d2d;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+        }
+
+        .screen-content {
+            width: 90%;
+            height: 80%;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px auto;
+            border-radius: 4px;
+        }
+
+        .monitor-stand {
+            width: 60px;
+            height: 30px;
+            background: #5a5a5a;
+            margin: 0 auto;
+            clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+        }
+
+        .monitor-base {
+            width: 100px;
+            height: 8px;
+            background: #3a3a3a;
+            border-radius: 20px;
+            margin: 0 auto;
+        }
+
+        /* Keyboard */
+        .keyboard {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 15px;
+            background: linear-gradient(180deg, #5a5a5a, #3a3a3a);
+            border-radius: 4px;
+            z-index: 2;
+            margin-top: 10px;
+        }
+
+        .keyboard::before {
+            content: '';
+            width: 85%;
+            height: 60%;
+            background: #2a2a2a;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 2px;
+        }
+
+        /* Mouse */
+        .mouse {
+            position: absolute;
+            bottom: 22px;
+            right: 90px;
+            width: 20px;
+            height: 28px;
+            background: linear-gradient(180deg, #5a5a5a, #3a3a3a);
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        .mouse::before {
+            content: '';
+            width: 2px;
+            height: 8px;
+            background: #2a2a2a;
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Books on Desk */
+        .desk-books {
+            position: absolute;
+            bottom: 20px;
+            left: 60px;
+            z-index: 2;
+        }
+
+        .dbook {
+            width: 70px;
+            height: 12px;
+            border-radius: 2px;
+            margin-bottom: 2px;
+        }
+
+        .db1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .db2 { background: linear-gradient(135deg, #4fc3f7, #29b6f6); width: 75px; }
+        .db3 { background: linear-gradient(135deg, #ffd966, #f4a945); width: 65px; }
+
+        /* Notebook */
+        .notebook {
+            position: absolute;
+            bottom: 22px;
+            right: 180px;
+            width: 60px;
+            height: 50px;
+            background: linear-gradient(180deg, #f5f5f5, #e0e0e0);
+            border-radius: 2px;
+            border-left: 4px solid #ff6b6b;
+            z-index: 2;
+        }
+
+        .notebook-spiral {
+            width: 100%;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                #bbb 0px,
+                #bbb 3px,
+                transparent 3px,
+                transparent 6px
+            );
+            position: absolute;
+            top: 5px;
+        }
+
+        /* Pen */
+        .pen {
+            position: absolute;
+            bottom: 30px;
+            right: 170px;
+            width: 4px;
+            height: 45px;
+            background: linear-gradient(180deg, #4fc3f7, #29b6f6);
+            border-radius: 2px;
+            transform: rotate(-25deg);
+            z-index: 3;
+        }
+
+        .pen::before {
+            content: '';
+            width: 6px;
+            height: 8px;
+            background: #ffd966;
+            position: absolute;
+            top: -8px;
+            left: -1px;
+            border-radius: 2px;
+        }
+
+        /* Desk Lamp */
+        .desk-lamp {
+            position: absolute;
+            bottom: 20px;
+            right: 50px;
+            z-index: 2;
+        }
+
+        .lamp-head {
+            width: 50px;
+            height: 30px;
+            background: linear-gradient(180deg, #ffd966, #f4a945);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 3px 10px rgba(244, 169, 69, 0.5);
+        }
+
+        .lamp-arm {
+            width: 4px;
+            height: 40px;
+            background: #5a5a5a;
+            margin: 0 auto;
+        }
+
+        .lamp-base {
+            width: 30px;
+            height: 8px;
+            background: #3a3a3a;
+            border-radius: 4px;
+            margin: 0 auto;
+        }
+
+        /* Pencil Cup */
+        .pencil-cup {
+            position: absolute;
+            bottom: 20px;
+            left: 150px;
+            z-index: 2;
+        }
+
+        .cup-holder {
+            width: 35px;
+            height: 45px;
+            background: linear-gradient(180deg, #c85a54, #a84842);
+            border-radius: 4px;
+        }
+
+        .pencil {
+            width: 4px;
+            height: 50px;
+            position: absolute;
+            bottom: 0;
+            border-radius: 2px;
+        }
+
+        .p1 {
+            background: linear-gradient(180deg, #ff6b6b, #ee5a6f);
+            left: 8px;
+        }
+
+        .p2 {
+            background: linear-gradient(180deg, #4fc3f7, #29b6f6);
+            left: 15px;
+            height: 55px;
+        }
+
+        .p3 {
+            background: linear-gradient(180deg, #ffd966, #f4a945);
+            left: 22px;
+            height: 48px;
+        }
+
+        /* Wall Shelf */
+        .wall-shelf {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            z-index: 1;
+        }
+
+        .shelf-board {
+            width: 150px;
+            height: 12px;
+            background: linear-gradient(180deg, #8b6f47, #6b5434);
+            border-radius: 4px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .shelf-item {
+            position: absolute;
+            font-size: 30px;
+            top: -45px;
+        }
+
+        .si1 { left: 10px; }
+        .si2 { left: 55px; }
+        .si3 { left: 100px; }
+
+        /* Small Plant */
+        .small-plant {
+            position: absolute;
+            top: 120px;
+            right: 80px;
+            z-index: 1;
+        }
+
+        .splant-pot {
+            width: 40px;
+            height: 35px;
+            background: linear-gradient(180deg, #c85a54, #a84842);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+        }
+
+        .splant-leaf {
+            width: 20px;
+            height: 30px;
+            background: #5a8a5a;
+            border-radius: 50% 0;
+            position: absolute;
+            bottom: 35px;
+        }
+
+        .sl1 {
+            transform: rotate(-25deg);
+            left: -5px;
+        }
+
+        .sl2 {
+            transform: rotate(25deg);
+            right: -5px;
+        }
+
+        .sl3 {
+            transform: rotate(0deg);
+            left: 10px;
+            bottom: 45px;
+        }
+
+        /* Office Chair */
+        .office-chair {
+            position: absolute;
+            bottom: -30px;
+            left: 60px;
+            z-index: 0;
+        }
+
+        .chair-back {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(180deg, #667eea, #5a6ec8);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+        }
+
+        .chair-seat {
+            width: 70px;
+            height: 20px;
+            background: linear-gradient(180deg, #667eea, #5a6ec8);
+            border-radius: 8px;
+            position: absolute;
+            top: 80px;
+            left: -5px;
+        }
+
+        .chair-pole {
+            width: 8px;
+            height: 40px;
+            background: #3a3a3a;
+            position: absolute;
+            top: 100px;
+            left: 26px;
+        }
+
+        .chair-base {
+            width: 80px;
+            height: 8px;
+            background: #3a3a3a;
+            border-radius: 4px;
+            position: absolute;
+            top: 140px;
+            left: -5px;
+        }
+
+        .chair-base::before,
+        .chair-base::after {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background: #2a2a2a;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -8px;
+        }
+
+        .chair-base::before { left: 5px; }
+        .chair-base::after { right: 5px; }
+
         @media (max-width: 968px) {
             .signup-wrapper {
                 grid-template-columns: 1fr;
@@ -251,7 +664,7 @@
     <nav class="navbar">
         <div class="logo-section">
             <div class="logo-icon">🎓</div>
-            <span class="logo-text">Shiksharthee</span>
+            <span class="logo-text">LearnX</span>
         </div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
@@ -313,7 +726,83 @@
             </div>
 
             <div class="illustration-container">
-                <div style="font-size: 15rem; opacity: 0.3;">🎓</div>
+                <div class="illustration">
+                    <!-- Background Wall -->
+                    <div class="wall-bg"></div>
+
+                    <!-- Study Desk -->
+                    <div class="study-desk">
+                        <div class="desk-surface"></div>
+                        <div class="desk-drawer"></div>
+                    </div>
+
+                    <!-- Computer Monitor on Desk -->
+                    <div class="monitor">
+                        <div class="monitor-screen">
+                            <div class="screen-content"></div>
+                        </div>
+                        <div class="monitor-stand"></div>
+                        <div class="monitor-base"></div>
+                    </div>
+
+                    <!-- Keyboard -->
+                    <div class="keyboard"></div>
+
+                    <!-- Mouse -->
+                    <div class="mouse"></div>
+
+                    <!-- Books on Desk -->
+                    <div class="desk-books">
+                        <div class="dbook db1"></div>
+                        <div class="dbook db2"></div>
+                        <div class="dbook db3"></div>
+                    </div>
+
+                    <!-- Notebook and Pen -->
+                    <div class="notebook">
+                        <div class="notebook-spiral"></div>
+                    </div>
+                    <div class="pen"></div>
+
+                    <!-- Desk Lamp -->
+                    <div class="desk-lamp">
+                        <div class="lamp-head"></div>
+                        <div class="lamp-arm"></div>
+                        <div class="lamp-base"></div>
+                    </div>
+
+                    <!-- Cup with Pencils -->
+                    <div class="pencil-cup">
+                        <div class="cup-holder"></div>
+                        <div class="pencil p1"></div>
+                        <div class="pencil p2"></div>
+                        <div class="pencil p3"></div>
+                    </div>
+
+                    <!-- Wall Shelf -->
+                    <div class="wall-shelf">
+                        <div class="shelf-board"></div>
+                        <div class="shelf-item si1">📚</div>
+                        <div class="shelf-item si2">🏆</div>
+                        <div class="shelf-item si3">🎓</div>
+                    </div>
+
+                    <!-- Small Plant -->
+                    <div class="small-plant">
+                        <div class="splant-pot"></div>
+                        <div class="splant-leaf sl1"></div>
+                        <div class="splant-leaf sl2"></div>
+                        <div class="splant-leaf sl3"></div>
+                    </div>
+
+                    <!-- Chair -->
+                    <div class="office-chair">
+                        <div class="chair-back"></div>
+                        <div class="chair-seat"></div>
+                        <div class="chair-pole"></div>
+                        <div class="chair-base"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -327,6 +816,13 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const role = document.querySelector('input[name="role"]:checked').value;
+
+            // Check if username already exists
+            const existingUser = localStorage.getItem('user_' + userid);
+            if (existingUser) {
+                alert('Username already taken! Please choose a different username.');
+                return;
+            }
 
             const user = {
                 userid: userid,

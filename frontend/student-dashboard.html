@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - Shiksharthee</title>
+    <title>Student Dashboard - LearnX</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -13,8 +13,8 @@
         }
 
         :root {
-            --primary-dark: #0a3d4a;
-            --primary-teal: #1a5f6f;
+            --primary-dark: #0f4f5e;
+            --primary-teal: #1f6f7f;
             --bg-light: #e8f4f8;
             --text-dark: #1a1a1a;
             --text-gray: #666;
@@ -22,13 +22,13 @@
             --accent-blue: #4fc3f7;
             --accent-purple: #667eea;
             --accent-gold: #f4a945;
-            --bg-gradient-start: #0a3d4a;
-            --bg-gradient-end: #7ec4c4;
+            --bg-gradient-start: #0f4f5e;
+            --bg-gradient-end: #8ed4d4;
         }
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--primary-teal) 50%, var(--bg-gradient-end) 100%);
+            background: linear-gradient(to right, var(--bg-gradient-start) 0%, var(--primary-teal) 50%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
         }
 
@@ -287,12 +287,12 @@
         .content-title {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--text-dark);
+            color: white;
             margin-bottom: 0.5rem;
         }
 
         .content-subtitle {
-            color: var(--text-gray);
+            color: rgba(255, 255, 255, 0.85);
             font-size: 1rem;
         }
 
@@ -310,14 +310,15 @@
             border: none;
             font-size: 1rem;
             font-weight: 600;
-            color: var(--text-gray);
+            color: #ffffff;
             cursor: pointer;
             position: relative;
             transition: color 0.3s ease;
         }
 
         .tab:hover {
-            color: var(--text-dark);
+            color: #ffffff;
+            opacity: 0.8;
         }
 
         .tab.active {
@@ -654,7 +655,7 @@
         <div class="nav-container">
             <div class="logo-section">
                 <div class="logo-icon">🎓</div>
-                <span class="logo-text">Shiksharthee</span>
+                <span class="logo-text">LearnX</span>
             </div>
 
             <div class="search-bar">
@@ -771,7 +772,7 @@
                 </div>
 
                 <div class="tabs">
-                    <button class="tab active" data-tab="popular">Most Popular</button>
+                    <button class="tab active" data-tab="popular">Courses</button>
                     <button class="tab" data-tab="new">New</button>
                     <button class="tab" data-tab="trending">Trending</button>
                 </div>
@@ -1452,6 +1453,19 @@
             tab.addEventListener('click', function() {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
+                
+                const tabType = this.dataset.tab;
+                
+                // Update filter based on tab
+                if (tabType === 'popular') {
+                    currentFilter = null; // Show all courses
+                } else if (tabType === 'new') {
+                    currentFilter = 'new';
+                } else if (tabType === 'trending') {
+                    currentFilter = 'trending';
+                }
+                
+                renderCourses(currentCategory, currentFilter);
             });
         });
 
