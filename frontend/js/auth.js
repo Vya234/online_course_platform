@@ -18,7 +18,8 @@ function handleLogin() {
 
 function logout() {
   localStorage.clear();
-  window.location.href = 'index.html';
+  sessionStorage.removeItem('loggedInUser');
+  window.location.href = 'login.html';
 }
 
 function checkAuth() {

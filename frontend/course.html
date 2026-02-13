@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - LearnX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0d7377;
+            --primary-dark: #14535f;
+            --accent: #ff8c42;
+            --bg-main: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+            --border: #e9ecef;
+            --success: #32cb6b;
+            --star-filled: #ffc107;
+            --star-empty: #ddd;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #0d7377 0%, #14535f 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 20px 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            padding: 10px 24px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .course-header {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .breadcrumb {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .course-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .course-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .university {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        .completed-badge {
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        .meta-icon {
+            font-size: 20px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 24px;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .card-title-icon {
+            font-size: 26px;
+        }
+
+        .course-description {
+            line-height: 1.8;
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .learning-item {
+            background: var(--bg-main);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .learning-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .learning-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .learning-text {
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 15px;
+        }
+
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .progress-card {
+            text-align: center;
+        }
+
+        .progress-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--bg-main);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00b4d8, #0077b6);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .rating-card {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff4d1 100%);
+        }
+
+        .rating-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .stars-display {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .star {
+            font-size: 42px;
+            cursor: pointer;
+            color: var(--star-empty);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .star.filled {
+            color: var(--star-filled);
+        }
+
+        .star:hover,
+        .star.hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 4px 8px rgba(255, 193, 7, 0.4));
+        }
+
+        .edit-rating-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 24px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .edit-rating-btn:hover {
+            background: #ff7420;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+        }
+
+        .details-card {
+            background: var(--bg-card);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            font-weight: 500;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .learning-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .course-title {
+                font-size: 32px;
+            }
+
+            .course-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo">🎓</div>
+            <div class="brand-name">LearnX</div>
+        </div>
+        <div class="header-right">
+            <button class="back-btn">← Back to Dashboard</button>
+            <div class="user-profile">
+                <div class="user-avatar">P</div>
+                <span>Pravallika</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="course-header">
+            <div class="breadcrumb">
+                <a href="#">Home</a> / <a href="#">All Courses</a> / Digital Marketing Masterclass
+            </div>
+            <div class="course-title-section">
+                <div>
+                    <h1 class="course-title">Digital Marketing Masterclass</h1>
+                    <div class="university">Harvard University</div>
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">⏱️</span>
+                            <span>8 weeks</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">⭐</span>
+                            <span id="overall-rating">4.7</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">👥</span>
+                            <span id="student-count">18,945</span> students
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">📚</span>
+                            <span>Beginner</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="completed-badge">
+                    ✓ Completed
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="left-column">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="card-title-icon">📖</span>
+                        Course Description
+                    </h2>
+                    <p class="course-description">
+                        Complete digital marketing course covering SEO, SEM, social media marketing, email marketing, content marketing, and analytics. Learn how to create effective marketing campaigns, understand your audience, and measure ROI. Perfect for entrepreneurs and marketing professionals.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="card-title-icon">📝</span>
+                        What You'll Learn
+                    </h2>
+                    <div class="learning-grid">
+                        <div class="learning-item">
+                            <div class="learning-icon">🔍</div>
+                            <div class="learning-text">SEO & Content Strategy</div>
+                        </div>
+                        <div class="learning-item">
+                            <div class="learning-icon">📱</div>
+                            <div class="learning-text">Social Media Marketing</div>
+                        </div>
+                        <div class="learning-item">
+                            <div class="learning-icon">📧</div>
+                            <div class="learning-text">Email Marketing Campaigns</div>
+                        </div>
+                        <div class="learning-item">
+                            <div class="learning-icon">💰</div>
+                            <div class="learning-text">PPC & Google Ads</div>
+                        </div>
+                        <div class="learning-item">
+                            <div class="learning-icon">📊</div>
+                            <div class="learning-text">Analytics & Reporting</div>
+                        </div>
+                        <div class="learning-item">
+                            <div class="learning-icon">🎨</div>
+                            <div class="learning-text">Content Marketing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="card progress-card">
+                    <h3 class="progress-title">Your Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="progress-text">100% complete</div>
+                </div>
+
+                <div class="card rating-card">
+                    <h3 class="rating-title">Your Rating</h3>
+                    <div class="stars-display" id="user-stars">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <button class="edit-rating-btn" id="edit-rating">Edit Rating</button>
+                </div>
+
+                <div class="card details-card">
+                    <div class="detail-row">
+                        <span class="detail-label">Price</span>
+                        <span class="detail-value">₹1999</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Language</span>
+                        <span class="detail-value">English</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Last Updated</span>
+                        <span class="detail-value">January 2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        Rating updated successfully!
+    </div>
+
+    <script>
+        // Course rating data stored in localStorage
+        const STORAGE_KEY = 'courseRatings';
+        const COURSE_ID = 'digital-marketing-masterclass';
+
+        // Initialize course data
+        let courseData = {
+            totalRatings: 18945,
+            totalScore: 89043.15, // This gives us an average of 4.7
+            userRating: 3
+        };
+
+        // Load saved data from localStorage
+        function loadRatingData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const allRatings = JSON.parse(saved);
+                if (allRatings[COURSE_ID]) {
+                    courseData = allRatings[COURSE_ID];
+                }
+            }
+        }
+
+        // Save data to localStorage
+        function saveRatingData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            const allRatings = saved ? JSON.parse(saved) : {};
+            allRatings[COURSE_ID] = courseData;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(allRatings));
+        }
+
+        // Calculate overall rating
+        function calculateOverallRating() {
+            return (courseData.totalScore / courseData.totalRatings).toFixed(1);
+        }
+
+        // Update the display
+        function updateDisplay() {
+            const overallRating = calculateOverallRating();
+            document.getElementById('overall-rating').textContent = overallRating;
+            document.getElementById('student-count').textContent = courseData.totalRatings.toLocaleString();
+            
+            // Update user stars
+            const stars = document.querySelectorAll('#user-stars .star');
+            stars.forEach((star, index) => {
+                if (index < courseData.userRating) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update rating
+        function updateRating(newRating) {
+            // Remove old rating from total
+            courseData.totalScore -= courseData.userRating;
+            
+            // Add new rating to total
+            courseData.totalScore += newRating;
+            
+            // Update user rating
+            courseData.userRating = newRating;
+            
+            // Save and update display
+            saveRatingData();
+            updateDisplay();
+            
+            showNotification(`Rating updated to ${newRating} star${newRating !== 1 ? 's' : ''}!`);
+        }
+
+        // Star interaction
+        const stars = document.querySelectorAll('#user-stars .star');
+        let isEditing = false;
+
+        // Initial disable state
+        stars.forEach(star => {
+            star.style.cursor = 'not-allowed';
+            star.style.opacity = '0.7';
+        });
+
+        // Enable/disable rating
+        document.getElementById('edit-rating').addEventListener('click', () => {
+            isEditing = !isEditing;
+            const btn = document.getElementById('edit-rating');
+            
+            if (isEditing) {
+                btn.textContent = 'Cancel';
+                btn.style.background = '#6c757d';
+                stars.forEach(star => {
+                    star.style.cursor = 'pointer';
+                    star.style.opacity = '1';
+                });
+                showNotification('Click on stars to rate');
+            } else {
+                btn.textContent = 'Edit Rating';
+                btn.style.background = '#ff8c42';
+                stars.forEach(star => {
+                    star.style.cursor = 'not-allowed';
+                    star.style.opacity = '0.7';
+                });
+            }
+        });
+
+        // Star hover effects
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseenter', () => {
+                if (!isEditing) return;
+                
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.add('hover');
+                    } else {
+                        s.classList.remove('hover');
+                    }
+                });
+            });
+
+            star.addEventListener('click', () => {
+                if (!isEditing) return;
+                
+                const rating = parseInt(star.dataset.value);
+                updateRating(rating);
+                
+                // Disable editing after rating
+                isEditing = false;
+                document.getElementById('edit-rating').textContent = 'Edit Rating';
+                document.getElementById('edit-rating').style.background = '#ff8c42';
+                stars.forEach(s => {
+                    s.style.cursor = 'not-allowed';
+                    s.style.opacity = '0.7';
+                });
+            });
+        });
+
+        document.getElementById('user-stars').addEventListener('mouseleave', () => {
+            stars.forEach(s => s.classList.remove('hover'));
+        });
+
+        // Initialize on page load
+        loadRatingData();
+        updateDisplay();
+    </script>
+</body>
+</html>

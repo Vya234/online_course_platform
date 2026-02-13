@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - LearnX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0f4f5e;
+            --primary-teal: #1f6f7f;
+            --bg-light: #e8f4f8;
+            --text-dark: #1a1a1a;
+            --text-gray: #666;
+            --border-color: #e0e0e0;
+            --accent-blue: #4fc3f7;
+            --accent-purple: #667eea;
+            --accent-gold: #f4a945;
+            --accent-green: #4caf50;
+            --bg-gradient-start: #0f4f5e;
+            --bg-gradient-end: #8ed4d4;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(to right, var(--bg-gradient-start) 0%, var(--primary-teal) 50%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1.5rem;
+            background: var(--bg-light);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: background 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: var(--bg-light);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Course Header */
+        .course-header {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .breadcrumb {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .course-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .course-title {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-university {
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            color: white;
+        }
+
+        .status-completed {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+        }
+
+        .course-meta-info {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-gray);
+        }
+
+        .meta-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-light);
+        }
+
+        .course-description {
+            color: var(--text-gray);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* Topics */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .topic-item {
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            transform: translateY(-2px);
+        }
+
+        .topic-icon {
+            font-size: 1.5rem;
+        }
+
+        .topic-text {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Course Contents */
+        .content-item {
+            padding: 1.25rem;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .content-item:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.2);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .content-type {
+            padding: 0.25rem 0.75rem;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .content-type.pdf {
+            background: #e74c3c;
+        }
+
+        .content-duration {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Sidebar */
+        .sidebar-content {
+            position: sticky;
+            top: 100px;
+        }
+
+        .enroll-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .enroll-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .enroll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+        }
+
+        .enroll-btn:disabled {
+            background: var(--text-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .course-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Certificate Card */
+        .certificate-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .certificate-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .certificate-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .certificate-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .certificate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            color: var(--accent-purple);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .certificate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: var(--bg-light);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4fc3f7, #29b6f6);
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-content {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .course-title {
+                font-size: 1.8rem;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Rating / Content Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .rating-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        .content-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem 1.5rem 2rem;
+            max-width: 960px;
+            width: 95%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        .content-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .content-modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .content-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .content-video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            margin-bottom: 1rem;
+        }
+
+        .content-video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .content-fullscreen-btn {
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-light);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .content-fullscreen-btn:hover {
+            background: var(--accent-blue);
+            color: #fff;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .star {
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #ddd;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffc107;
+            transform: scale(1.1);
+        }
+
+        .rating-value {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .review-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            margin-bottom: 1.5rem;
+        }
+
+        .review-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-cancel {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .modal-btn-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .modal-btn-submit {
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            color: white;
+        }
+
+        .modal-btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.4);
+        }
+
+        /* Rate Course Button */
+        .rate-course-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .rate-course-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        .user-rating-display {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .user-rating-display h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .user-rating-stars {
+            color: #ffc107;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-rating-text {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .edit-rating-btn {
+            background: none;
+            border: none;
+            color: var(--accent-blue);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .edit-rating-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="logo-section">
+                <div class="logo-icon">🎓</div>
+                <div class="logo-text">LearnX</div>
+            </div>
+            <div class="nav-actions">
+                <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">S</div>
+                    <span class="user-name" id="userName">Student</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Course Header -->
+        <div class="course-header">
+            <div class="breadcrumb">
+                <a href="student-dashboard.html">Home</a> / <a href="student-dashboard.html">All Courses</a> / <span id="courseBreadcrumb">Course Details</span>
+            </div>
+            
+            <div class="course-title-section">
+                <div>
+                    <h1 class="course-title" id="courseTitle">Loading...</h1>
+                    <div class="course-university" id="courseUniversity">Loading...</div>
+                </div>
+                <div>
+                    <span class="status-badge" id="courseStatus">Active</span>
+                </div>
+            </div>
+
+            <div class="course-meta-info">
+                <div class="meta-item">
+                    <span class="meta-icon">⏱️</span>
+                    <span id="courseDuration">Loading...</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">⭐</span>
+                    <span id="courseRating">4.8</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">👥</span>
+                    <span id="courseStudents">1,234 students</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">📚</span>
+                    <span id="courseLevel">Intermediate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Description -->
+                <div class="content-section">
+                    <h2 class="section-title">📖 Course Description</h2>
+                    <p class="course-description" id="courseDescription">Loading...</p>
+                </div>
+
+                <!-- Topics -->
+                <div class="content-section">
+                    <h2 class="section-title">📝 What You'll Learn</h2>
+                    <div class="topics-grid" id="courseTopics">
+                        <!-- Topics will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Course Contents -->
+                <div class="content-section">
+                    <h2 class="section-title">📂 Course Contents</h2>
+                    <div id="courseContents">
+                        <!-- Course contents will be dynamically loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-content">
+                <!-- Progress (for enrolled courses) -->
+                <div class="progress-section" id="progressSection" style="display: none;">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-dark);">Your Progress</h3>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">0% complete</div>
+                </div>
+
+                <!-- Enroll Card -->
+                <div class="enroll-card">
+                    <button class="enroll-btn" id="enrollBtn" onclick="enrollInCourse()">
+                        Enroll Now 🚀
+                    </button>
+
+                    <!-- User Rating Display -->
+                    <div class="user-rating-display" id="userRatingDisplay">
+                        <h4>Your Rating</h4>
+                        <div class="user-rating-stars" id="userRatingStars">⭐⭐⭐⭐⭐</div>
+                        <p class="user-rating-text" id="userRatingText"></p>
+                        <button class="edit-rating-btn" onclick="openRatingModal()">Edit Rating</button>
+                    </div>
+
+                    <!-- Rate Course Button -->
+                    <button class="rate-course-btn" id="rateCourseBtn" onclick="openRatingModal()">
+                        Rate This Course ⭐
+                    </button>
+                    
+                    <div class="course-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Price</span>
+                            <span class="stat-value" id="coursePrice">₹999</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Language</span>
+                            <span class="stat-value">English</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Last Updated</span>
+                            <span class="stat-value">January 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificate Card (for completed courses) -->
+                <div class="certificate-card" id="certificateCard" style="display: none;">
+                    <div class="certificate-icon">🏆</div>
+                    <h3 class="certificate-title">Certificate of Completion</h3>
+                    <p class="certificate-text">Congratulations! You've completed this course.</p>
+                    <button class="certificate-btn" onclick="downloadCertificate()">
+                        Download Certificate 📜
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Modal -->
+    <div class="modal-overlay" id="contentModal">
+        <div class="content-modal">
+            <div class="content-modal-header">
+                <h2 class="content-modal-title" id="contentModalTitle">Lesson</h2>
+                <button class="content-modal-close" onclick="closeContentModal()">✕</button>
+            </div>
+            <div id="contentModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="rating-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Rate This Course</h2>
+                <p class="modal-subtitle">Share your experience with other learners</p>
+            </div>
+
+            <div class="star-rating" id="starRating">
+                <span class="star" data-rating="1">★</span>
+                <span class="star" data-rating="2">★</span>
+                <span class="star" data-rating="3">★</span>
+                <span class="star" data-rating="4">★</span>
+                <span class="star" data-rating="5">★</span>
+            </div>
+
+            <div class="rating-value" id="ratingValue">Click on stars to rate</div>
+
+            <textarea 
+                class="review-textarea" 
+                id="reviewText" 
+                placeholder="Write your review here... (optional)"></textarea>
+
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeRatingModal()">Cancel</button>
+                <button class="modal-btn modal-btn-submit" onclick="submitRating()">Submit Rating</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+
+        // Sample course data (static details like description, topics and contents).
+        // Dynamic fields like status/progress now come from the backend.
+        const coursesData = {
+            1: {
+                id: 1,
+                title: "Full Stack Web Development Bootcamp",
+                university: "Stanford University",
+                description: "Master full-stack web development with this comprehensive bootcamp. Learn HTML, CSS, JavaScript, React, Node.js, MongoDB, and more. Build real-world projects and get job-ready skills. This course covers everything from frontend design to backend API development, database management, and deployment strategies.",
+                duration: "12 weeks",
+                rating: 4.8,
+                students: "15,234",
+                level: "Intermediate",
+                price: 2999,
+                originalPrice: 5999,
+                topics: [
+                    { icon: "🌐", text: "HTML5 & CSS3 Fundamentals" },
+                    { icon: "⚡", text: "JavaScript & ES6+" },
+                    { icon: "⚛️", text: "React.js & Redux" },
+                    { icon: "🔧", text: "Node.js & Express" },
+                    { icon: "🗄️", text: "MongoDB & Database Design" },
+                    { icon: "🔐", text: "Authentication & Security" },
+                    { icon: "🚀", text: "Deployment & DevOps" },
+                    { icon: "📱", text: "Responsive Design" }
+                ],
+                contents: [
+                    { type: "video", title: "Introduction to Web Development", duration: "15:30" },
+                    { type: "video", title: "HTML Basics and Structure", duration: "25:45" },
+                    { type: "pdf", title: "HTML Reference Guide", duration: "12 pages" },
+                    { type: "video", title: "CSS Styling and Layout", duration: "35:20" },
+                    { type: "video", title: "JavaScript Fundamentals", duration: "45:15" },
+                    { type: "pdf", title: "JavaScript Best Practices", duration: "18 pages" },
+                    { type: "video", title: "React Components and Props", duration: "40:10" },
+                    { type: "video", title: "State Management with Redux", duration: "38:25" },
+                    { type: "video", title: "Building REST APIs with Node.js", duration: "50:30" },
+                    { type: "pdf", title: "API Design Patterns", duration: "15 pages" },
+                    { type: "video", title: "MongoDB and Database Operations", duration: "42:15" },
+                    { type: "video", title: "Deployment to Production", duration: "30:45" }
+                ],
+                enrolled: false,
+                progress: 0,
+                status: "not-enrolled"
+            },
+            2: {
+                id: 2,
+                title: "Machine Learning A-Z",
+                university: "MIT",
+                description: "Dive deep into machine learning algorithms and techniques. Learn supervised and unsupervised learning, neural networks, deep learning, and how to build ML models from scratch. This comprehensive course covers Python for ML, data preprocessing, model evaluation, and real-world applications.",
+                duration: "10 weeks",
+                rating: 4.9,
+                students: "12,567",
+                level: "Advanced",
+                price: 3499,
+                originalPrice: 6999,
+                topics: [
+                    { icon: "🐍", text: "Python for Machine Learning" },
+                    { icon: "📊", text: "Data Preprocessing & Analysis" },
+                    { icon: "🤖", text: "Supervised Learning Algorithms" },
+                    { icon: "🔍", text: "Unsupervised Learning" },
+                    { icon: "🧠", text: "Neural Networks & Deep Learning" },
+                    { icon: "📈", text: "Model Evaluation & Tuning" },
+                    { icon: "🎯", text: "Real-world ML Projects" },
+                    { icon: "🔬", text: "ML Best Practices" }
+                ],
+                contents: [
+                    { type: "video", title: "Introduction to Machine Learning", duration: "20:15" },
+                    { type: "video", title: "Python Libraries for ML", duration: "30:40" },
+                    { type: "pdf", title: "ML Mathematics Review", duration: "25 pages" },
+                    { type: "video", title: "Linear Regression", duration: "35:20" },
+                    { type: "video", title: "Classification Algorithms", duration: "40:15" },
+                    { type: "video", title: "Decision Trees and Random Forests", duration: "38:50" },
+                    { type: "pdf", title: "Algorithm Comparison Guide", duration: "20 pages" },
+                    { type: "video", title: "Neural Networks Basics", duration: "45:30" },
+                    { type: "video", title: "Deep Learning with TensorFlow", duration: "50:25" },
+                    { type: "video", title: "Model Deployment", duration: "28:40" }
+                ],
+                enrolled: true,
+                progress: 65,
+                status: "active"
+            },
+            3: {
+                id: 3,
+                title: "Digital Marketing Masterclass",
+                university: "Harvard University",
+                description: "Complete digital marketing course covering SEO, SEM, social media marketing, email marketing, content marketing, and analytics. Learn how to create effective marketing campaigns, understand your audience, and measure ROI. Perfect for entrepreneurs and marketing professionals.",
+                duration: "8 weeks",
+                rating: 4.7,
+                students: "18,945",
+                level: "Beginner",
+                price: 1999,
+                originalPrice: 3999,
+                topics: [
+                    { icon: "🔍", text: "SEO & Content Strategy" },
+                    { icon: "📱", text: "Social Media Marketing" },
+                    { icon: "📧", text: "Email Marketing Campaigns" },
+                    { icon: "💰", text: "PPC & Google Ads" },
+                    { icon: "📊", text: "Analytics & Reporting" },
+                    { icon: "✍️", text: "Content Marketing" },
+                    { icon: "🎯", text: "Conversion Optimization" },
+                    { icon: "📈", text: "Marketing Automation" }
+                ],
+                contents: [
+                    { type: "video", title: "Digital Marketing Overview", duration: "18:30" },
+                    { type: "video", title: "SEO Fundamentals", duration: "32:15" },
+                    { type: "pdf", title: "SEO Checklist", duration: "10 pages" },
+                    { type: "video", title: "Social Media Strategy", duration: "28:45" },
+                    { type: "video", title: "Facebook & Instagram Ads", duration: "35:20" },
+                    { type: "video", title: "Google Ads Mastery", duration: "40:10" },
+                    { type: "pdf", title: "Ad Campaign Templates", duration: "15 pages" },
+                    { type: "video", title: "Email Marketing Best Practices", duration: "25:30" },
+                    { type: "video", title: "Google Analytics Deep Dive", duration: "38:25" },
+                    { type: "video", title: "Marketing ROI Calculation", duration: "22:40" }
+                ],
+                enrolled: true,
+                progress: 100,
+                status: "completed"
+            }
+        };
+
+        // Get course ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = parseInt(urlParams.get('id')) || 1;
+        let currentCourse = coursesData[courseId] || {
+            id: courseId,
+            title: '',
+            university: '',
+            description: '',
+            duration: '',
+            rating: 0,
+            students: '',
+            level: 'Intermediate',
+            price: 0,
+            originalPrice: 0,
+            topics: [],
+            contents: [],
+            enrolled: false,
+            progress: 0,
+            status: 'not-enrolled'
+        };
+
+        // Load user data
+        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
+        if (loggedInUser) {
+            document.getElementById('userName').textContent = loggedInUser.name;
+            document.getElementById('userAvatar').textContent = loggedInUser.name.charAt(0).toUpperCase();
+        }
+
+        // Rating system variables
+        let selectedRating = 0;
+        let userRatings = JSON.parse(localStorage.getItem('course_ratings_' + (loggedInUser?.userid || 'guest'))) || {};
+
+        let courseContents = [];
+        let completedContentIds = new Set();
+        let contentCompletionPercent = 0;
+
+        // Load course data (static details + dynamic header from backend)
+        function loadCourseData() {
+            // Static description/topics/contents from local object
+            if (currentCourse.description) {
+                document.getElementById('courseDescription').textContent = currentCourse.description;
+            }
+
+            // Load dynamic header data & enrollment from backend
+            loadCourseHeaderFromApi();
+            loadEnrollmentFromApi();
+            loadCourseContentsFromApi();
+            loadCourseTopicsFromApi();
+        }
+
+        async function loadCourseTopicsFromApi() {
+            try {
+                const response = await fetch(`${API_BASE}/api/courses/${courseId}/topics`);
+                if (!response.ok) return;
+                const topics = await response.json();
+                if (!Array.isArray(topics) || topics.length === 0) return;
+
+                const topicsContainer = document.getElementById('courseTopics');
+                topicsContainer.innerHTML = topics.map(t => `
+                    <div class="topic-item">
+                        <span class="topic-icon">📘</span>
+                        <span class="topic-text">${t.title}</span>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Failed to load course topics from API:', err);
+            }
+        }
+
+        async function loadCourseContentsFromApi() {
+            try {
+                const response = await fetch(`${API_BASE}/api/courses/${courseId}/contents`);
+                if (!response.ok) {
+                    renderContentsFromStatic();
+                    return;
+                }
+                const data = await response.json();
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    renderContentsFromStatic();
+                    return;
+                }
+
+                courseContents = data;
+                renderContents();
+            } catch (err) {
+                console.error('Failed to load course contents from API:', err);
+                renderContentsFromStatic();
+            }
+        }
+
+        const samplePdfLinks = [
+            'https://docs.google.com/document/d/1N9YWvcyF1YolZuQiR_AUhiNDRc-JFrk8rHL9KAMnP5A/preview'
+        ];
+
+        // Fallback: render from static course definition
+        function renderContentsFromStatic() {
+            if (!currentCourse.contents) return;
+            courseContents = currentCourse.contents.map((c, idx) => ({
+                id: idx + 1,
+                title: c.title,
+                contentType: c.type === 'video' ? 'video' : 'note',
+                url: c.type === 'video'
+                    ? 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                    : samplePdfLinks[Math.floor(Math.random() * samplePdfLinks.length)],
+                noteText: c.type === 'video'
+                    ? 'Watch the lecture video for this lesson.'
+                    : 'Read or download the PDF notes for this lesson.',
+                orderIndex: idx + 1,
+            }));
+            renderContents();
+        }
+
+        function renderContents() {
+            const contentsContainer = document.getElementById('courseContents');
+
+            if (!courseContents.length) {
+                contentsContainer.innerHTML = '<p style="color: var(--text-gray);">No contents available for this course yet.</p>';
+                return;
+            }
+
+            contentsContainer.innerHTML = courseContents.map((content, index) => `
+                <div class="content-item" data-index="${index}">
+                    <div class="content-header">
+                        <div class="content-title">
+                            <span style="font-size: 1.5rem;">${content.contentType === 'video' ? '🎥' : '📄'}</span>
+                            <span>${index + 1}. ${content.title}</span>
+                        </div>
+                        <span class="content-duration">
+                            ${content.contentType === 'video' ? 'Video' : 'Notes'}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+
+            contentsContainer.querySelectorAll('.content-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const idx = parseInt(item.getAttribute('data-index'), 10);
+                    const content = courseContents[idx];
+                    openContent(content);
+                    if (content && content.id != null) {
+                        markContentCompleted(content.id);
+                    }
+                });
+            });
+
+            // After initial render, recompute progress from stored completions
+            loadCompletedFromStorage();
+            updateProgressFromContents();
+        }
+
+        function progressStorageKey() {
+            const userKey = loggedInUser?.userid || 'guest';
+            return `course_completion_${userKey}_${courseId}`;
+        }
+
+        function loadCompletedFromStorage() {
+            try {
+                const raw = localStorage.getItem(progressStorageKey());
+                if (!raw) {
+                    completedContentIds = new Set();
+                    return;
+                }
+                const arr = JSON.parse(raw);
+                completedContentIds = new Set(arr);
+            } catch {
+                completedContentIds = new Set();
+            }
+        }
+
+        function saveCompletedToStorage() {
+            try {
+                localStorage.setItem(
+                    progressStorageKey(),
+                    JSON.stringify(Array.from(completedContentIds))
+                );
+            } catch {
+                // ignore storage errors
+            }
+        }
+
+        function markContentCompleted(contentId) {
+            completedContentIds.add(contentId);
+            saveCompletedToStorage();
+            updateProgressFromContents();
+        }
+
+        async function updateProgressFromContents() {
+            const total = courseContents.length;
+            const completed = Array.from(completedContentIds).filter(id =>
+                courseContents.some(c => c.id === id)
+            ).length;
+
+            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+            contentCompletionPercent = percent;
+            currentCourse.progress = percent;
+
+            const progressSection = document.getElementById('progressSection');
+            const bar = document.getElementById('progressBar');
+            const text = document.getElementById('progressText');
+
+            if (!progressSection || !bar || !text) return;
+
+            progressSection.style.display = 'block';
+            bar.style.width = `${percent}%`;
+            text.textContent = `${percent}% complete (${completed} of ${total} lessons)`;
+
+            // Sync progress to backend so dashboard and course page stay in sync
+            await syncProgressToBackend(percent);
+        }
+
+        async function syncProgressToBackend(percent) {
+            if (!loggedInUser) return;
+            try {
+                const status = percent >= 100 ? 'completed' : 'active';
+                const response = await fetch(`${API_BASE}/api/courses/${courseId}/enrollment`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userid: loggedInUser.userid,
+                        progress: percent,
+                        status
+                    })
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to sync progress with backend');
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.enrollment) {
+                    currentCourse.status = data.enrollment.status || status;
+                    currentCourse.progress = data.enrollment.progress ?? percent;
+                }
+            } catch (err) {
+                console.error('Error syncing progress to backend:', err);
+            }
+        }
+
+        function openContent(content) {
+            // Show all contents (video or link/PDF) inside the modal, with an embedded viewer when URL is present
+            const modal = document.getElementById('contentModal');
+            const titleEl = document.getElementById('contentModalTitle');
+            const bodyEl = document.getElementById('contentModalBody');
+
+            titleEl.textContent = content.title;
+
+            let html = '';
+            if (content.url) {
+                const embedUrl = toEmbedUrl(content.url);
+                html += `
+                    <button class="content-fullscreen-btn" id="contentFullscreenBtn">Fullscreen ⛶</button>
+                    <div class="content-video-wrapper" id="contentVideoWrapper">
+                        <iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div style="margin-top: 0.75rem;">
+                        <a href="${content.url}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: underline;">
+                            Open in new tab
+                        </a>
+                    </div>
+                `;
+            }
+
+            if (content.noteText) {
+                html += `
+                    <div style="margin-top: 0.75rem; color: var(--text-gray); line-height: 1.6;">
+                        <strong>Notes:</strong> ${content.noteText}
+                    </div>
+                `;
+            }
+
+            if (!html) {
+                html = '<p style="color: var(--text-gray);">No content available for this lesson yet.</p>';
+            }
+
+            bodyEl.innerHTML = html;
+            modal.classList.add('active');
+
+            const videoFsBtn = document.getElementById('contentFullscreenBtn');
+            if (videoFsBtn) {
+                videoFsBtn.addEventListener('click', () => enterContentFullscreen('contentVideoWrapper'));
+            }
+        }
+
+        function closeContentModal() {
+            const modal = document.getElementById('contentModal');
+            modal.classList.remove('active');
+        }
+
+        function enterContentFullscreen(wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+            if (wrapper.requestFullscreen) {
+                wrapper.requestFullscreen();
+            } else if (wrapper.webkitRequestFullscreen) {
+                wrapper.webkitRequestFullscreen();
+            } else if (wrapper.msRequestFullscreen) {
+                wrapper.msRequestFullscreen();
+            }
+        }
+
+        function toEmbedUrl(url) {
+            try {
+                if (!url) return '';
+                // If it's already an embed URL, return as-is
+                if (url.includes('embed')) return url;
+                const u = new URL(url);
+                if (u.hostname.includes('youtube.com')) {
+                    const v = u.searchParams.get('v');
+                    if (v) return `https://www.youtube.com/embed/${v}`;
+                }
+                if (u.hostname === 'youtu.be') {
+                    const id = u.pathname.replace('/', '');
+                    if (id) return `https://www.youtube.com/embed/${id}`;
+                }
+                return url;
+            } catch {
+                return url;
+            }
+        }
+
+        async function loadCourseHeaderFromApi() {
+            try {
+                const response = await fetch(`${API_BASE}/api/courses/${courseId}`);
+                if (!response.ok) return;
+                const c = await response.json();
+
+                document.getElementById('courseTitle').textContent = c.title || currentCourse.title;
+                document.getElementById('courseUniversity').textContent = c.university || currentCourse.university;
+                document.getElementById('courseBreadcrumb').textContent = c.title || currentCourse.title;
+                document.getElementById('courseDuration').textContent = c.duration || currentCourse.duration;
+                document.getElementById('courseRating').textContent = c.rating ?? currentCourse.rating;
+                document.getElementById('courseStudents').textContent =
+                    (c.students != null ? c.students.toLocaleString('en-IN') : currentCourse.students) + ' students';
+                document.getElementById('coursePrice').textContent = '₹' + (c.price ?? currentCourse.price);
+            } catch (err) {
+                console.error('Failed to load course header from API:', err);
+                // Fallback to static values
+                document.getElementById('courseTitle').textContent = currentCourse.title;
+                document.getElementById('courseUniversity').textContent = currentCourse.university;
+                document.getElementById('courseBreadcrumb').textContent = currentCourse.title;
+                document.getElementById('courseDuration').textContent = currentCourse.duration;
+                document.getElementById('courseRating').textContent = currentCourse.rating;
+                document.getElementById('courseStudents').textContent = currentCourse.students + ' students';
+                document.getElementById('coursePrice').textContent = '₹' + currentCourse.price;
+            }
+        }
+
+        // Update enrollment UI based on course status
+        function updateEnrollmentUI() {
+            const enrollBtn = document.getElementById('enrollBtn');
+            const rateCourseBtn = document.getElementById('rateCourseBtn');
+            const userRatingDisplay = document.getElementById('userRatingDisplay');
+            const progressSection = document.getElementById('progressSection');
+            const certificateCard = document.getElementById('certificateCard');
+
+            // Use content-based completion percent if available, otherwise fall back to stored progress
+            const percent = contentCompletionPercent || currentCourse.progress || 0;
+
+            if (currentCourse.status === 'completed') {
+                enrollBtn.style.display = 'none';
+                progressSection.style.display = 'block';
+                certificateCard.style.display = 'block';
+                
+                document.getElementById('progressBar').style.width = percent + '%';
+                document.getElementById('progressText').textContent =
+                    `${percent}% complete`;
+
+                // Show rating option for completed courses
+                checkAndDisplayRating();
+            } else if (currentCourse.status === 'active') {
+                enrollBtn.style.display = 'none';
+                progressSection.style.display = 'block';
+                certificateCard.style.display = 'none';
+                
+                document.getElementById('progressBar').style.width = percent + '%';
+                document.getElementById('progressText').textContent =
+                    `${percent}% complete`;
+
+                // Show rating option for active courses
+                checkAndDisplayRating();
+            } else {
+                enrollBtn.style.display = 'block';
+                rateCourseBtn.style.display = 'none';
+                userRatingDisplay.style.display = 'none';
+                certificateCard.style.display = 'none';
+
+                // Still show an active progress bar even if not formally enrolled
+                progressSection.style.display = 'block';
+                document.getElementById('progressBar').style.width = percent + '%';
+                document.getElementById('progressText').textContent =
+                    `${percent}% complete`;
+            }
+        }
+
+        // Check if user has rated and display accordingly
+        function checkAndDisplayRating() {
+            const userRating = userRatings[courseId];
+            const rateCourseBtn = document.getElementById('rateCourseBtn');
+            const userRatingDisplay = document.getElementById('userRatingDisplay');
+
+            if (userRating) {
+                // User has already rated - show their rating
+                rateCourseBtn.style.display = 'none';
+                userRatingDisplay.style.display = 'block';
+                
+                const stars = '⭐'.repeat(userRating.rating);
+                document.getElementById('userRatingStars').textContent = stars;
+                
+                if (userRating.review) {
+                    document.getElementById('userRatingText').textContent = `"${userRating.review}"`;
+                } else {
+                    document.getElementById('userRatingText').textContent = '';
+                }
+            } else {
+                // User hasn't rated yet - show rate button
+                rateCourseBtn.style.display = 'block';
+                userRatingDisplay.style.display = 'none';
+            }
+        }
+
+        // Open rating modal
+        function openRatingModal() {
+            const modal = document.getElementById('ratingModal');
+            modal.classList.add('active');
+            
+            // Load existing rating if any
+            const existingRating = userRatings[courseId];
+            if (existingRating) {
+                selectedRating = existingRating.rating;
+                document.getElementById('reviewText').value = existingRating.review || '';
+                updateStarDisplay();
+            } else {
+                selectedRating = 0;
+                document.getElementById('reviewText').value = '';
+                updateStarDisplay();
+            }
+        }
+
+        // Close rating modal
+        function closeRatingModal() {
+            const modal = document.getElementById('ratingModal');
+            modal.classList.remove('active');
+        }
+
+        // Star rating interaction
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.dataset.rating);
+                updateStarDisplay();
+            });
+
+            star.addEventListener('mouseenter', function() {
+                const rating = parseInt(this.dataset.rating);
+                highlightStars(rating);
+            });
+        });
+
+        document.getElementById('starRating').addEventListener('mouseleave', function() {
+            updateStarDisplay();
+        });
+
+        function highlightStars(rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStarDisplay() {
+            highlightStars(selectedRating);
+            const ratingValue = document.getElementById('ratingValue');
+            if (selectedRating > 0) {
+                const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+                ratingValue.textContent = `${selectedRating} Star${selectedRating > 1 ? 's' : ''} - ${labels[selectedRating]}`;
+            } else {
+                ratingValue.textContent = 'Click on stars to rate';
+            }
+        }
+
+        // Submit rating
+        function submitRating() {
+            if (selectedRating === 0) {
+                alert('Please select a rating!');
+                return;
+            }
+
+            const review = document.getElementById('reviewText').value.trim();
+            
+            // Save rating to localStorage
+            userRatings[courseId] = {
+                rating: selectedRating,
+                review: review,
+                date: new Date().toISOString(),
+                courseName: currentCourse.title
+            };
+
+            localStorage.setItem('course_ratings_' + (loggedInUser?.userid || 'guest'), JSON.stringify(userRatings));
+
+            // Close modal and update display
+            closeRatingModal();
+            checkAndDisplayRating();
+
+            alert(`✨ Thank you for rating "${currentCourse.title}"!\n\nYour ${selectedRating}-star rating has been saved.`);
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('ratingModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRatingModal();
+            }
+        });
+
+        document.getElementById('contentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeContentModal();
+            }
+        });
+
+        // Load enrollment status from backend
+        async function loadEnrollmentFromApi() {
+            if (!loggedInUser) {
+                updateEnrollmentUI();
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `${API_BASE}/api/courses/${courseId}/enrollment?userid=${encodeURIComponent(loggedInUser.userid)}`
+                );
+                if (!response.ok) {
+                    updateEnrollmentUI();
+                    return;
+                }
+                const enrollment = await response.json();
+
+                if (enrollment) {
+                    currentCourse.enrolled = true;
+                    currentCourse.status = enrollment.status || 'active';
+                    currentCourse.progress = enrollment.progress ?? 0;
+                } else {
+                    currentCourse.enrolled = false;
+                    currentCourse.status = 'not-enrolled';
+                    currentCourse.progress = 0;
+                }
+            } catch (err) {
+                console.error('Failed to load enrollment from API:', err);
+            }
+
+            updateEnrollmentUI();
+        }
+
+        // Enroll in course via backend
+        async function enrollInCourse() {
+            if (!loggedInUser) {
+                alert('Please login as a student to enroll.');
+                return;
+            }
+
+            if (!confirm(`Enroll in "${currentCourse.title}" for ₹${currentCourse.price}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/courses/${courseId}/enroll`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userid: loggedInUser.userid })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(data.message || 'Failed to enroll. Please try again.');
+                    return;
+                }
+
+                alert('🎉 Enrollment successful! Welcome to the course.');
+                currentCourse.enrolled = true;
+                currentCourse.status = data.enrollment.status || 'active';
+                currentCourse.progress = data.enrollment.progress ?? 0;
+                updateEnrollmentUI();
+            } catch (err) {
+                console.error('Error enrolling in course:', err);
+                alert('Unable to connect to server. Please ensure the backend is running.');
+            }
+        }
+
+        // Download certificate
+        function downloadCertificate() {
+            alert('🏆 Downloading your certificate...\n\nCertificate of Completion for:\n' + currentCourse.title + '\n\nIssued by: ' + currentCourse.university);
+        }
+
+        // Go back to dashboard
+        function goBack() {
+            window.location.href = 'student-dashboard.html';
+        }
+
+        // Initialize page
+        loadCourseData();
+    </script>
+</body>
+</html>

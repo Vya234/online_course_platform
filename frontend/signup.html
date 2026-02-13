@@ -808,36 +808,44 @@
     </div>
 
     <script>
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
+        const API_BASE = 'http://localhost:3000';
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const userid = document.getElementById('userid').value;
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+            const userid = document.getElementById('userid').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const role = document.querySelector('input[name="role"]:checked').value;
 
-            // Check if username already exists
-            const existingUser = localStorage.getItem('user_' + userid);
-            if (existingUser) {
-                alert('Username already taken! Please choose a different username.');
+            if (!userid || !name || !email || !password) {
+                alert('Please fill in all fields.');
                 return;
             }
 
-            const user = {
-                userid: userid,
-                name: name,
-                email: email,
-                password: password,
-                role: role,
-                enrolledCourses: [],
-                createdAt: new Date().toISOString()
-            };
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userid, name, email, password, role })
+                });
 
-            localStorage.setItem('user_' + userid, JSON.stringify(user));
+                const data = await response.json();
 
-            alert('Signup successful! Please login with your credentials.');
-            window.location.href = 'login.html';
+                if (!response.ok) {
+                    alert(data.message || 'Signup failed. Please try again.');
+                    return;
+                }
+
+                alert('Signup successful! Please login with your credentials.');
+                window.location.href = 'login.html';
+            } catch (err) {
+                console.error('Signup error:', err);
+                alert('Unable to connect to server. Please ensure the backend is running.');
+            }
         });
     </script>
 </body>

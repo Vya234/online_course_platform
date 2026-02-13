@@ -781,35 +781,12 @@
     </div>
 
     <script>
-        // Pre-populate admin and data analyst accounts
-        if (!localStorage.getItem('admin_initialized')) {
-            const adminUser = {
-                userid: 'admin',
-                name: 'Administrator',
-                email: 'admin@learnx.com',
-                password: 'admin123',
-                role: 'administrator',
-                createdAt: new Date().toISOString()
-            };
-            
-            const analystUser = {
-                userid: 'analyst',
-                name: 'Data Analyst',
-                email: 'analyst@learnx.com',
-                password: 'analyst123',
-                role: 'data_analyst',
-                createdAt: new Date().toISOString()
-            };
-            
-            localStorage.setItem('user_admin', JSON.stringify(adminUser));
-            localStorage.setItem('user_analyst', JSON.stringify(analystUser));
-            localStorage.setItem('admin_initialized', 'true');
-        }
+        const API_BASE = 'http://localhost:3000';
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const userid = document.getElementById('userid').value;
+            const userid = document.getElementById('userid').value.trim();
             const password = document.getElementById('password').value;
             const selectedRole = document.querySelector('input[name="role"]:checked').value;
             const errorMessage = document.getElementById('errorMessage');
@@ -818,47 +795,56 @@
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
 
-            const storedUser = localStorage.getItem('user_' + userid);
-
-            if (!storedUser) {
-                errorMessage.textContent = 'Account not found. Please sign up first.';
+            if (!userid || !password) {
+                errorMessage.textContent = 'Please enter both User ID and Password.';
                 errorMessage.classList.add('show');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userid, password, role: selectedRole })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    errorMessage.textContent = data.message || 'Login failed. Please try again.';
+                    errorMessage.classList.add('show');
+
+                    if (response.status === 404) {
+                        setTimeout(() => {
+                            window.location.href = 'signup.html';
+                        }, 2000);
+                    }
+                    return;
+                }
+
+                const user = data.user;
+                sessionStorage.setItem('loggedInUser', JSON.stringify(user));
+                successMessage.textContent = 'Login successful! Welcome back, ' + user.name + '!';
+                successMessage.classList.add('show');
                 
                 setTimeout(() => {
-                    window.location.href = 'signup.html';
-                }, 2000);
-                return;
-            }
-
-            const user = JSON.parse(storedUser);
-
-            if (user.password !== password) {
-                errorMessage.textContent = 'Incorrect password. Please try again.';
+                    if (user.role === 'student') {
+                        window.location.href = 'student-dashboard.html';
+                    } else if (user.role === 'instructor') {
+                        window.location.href = 'instructor-dashboard.html';
+                    } else if (user.role === 'administrator') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else if (user.role === 'data_analyst') {
+                        window.location.href = 'analyst-dashboard.html';
+                    }
+                }, 1000);
+            } catch (err) {
+                console.error('Login error:', err);
+                errorMessage.textContent = 'Unable to connect to server. Please ensure the backend is running.';
                 errorMessage.classList.add('show');
-                return;
             }
-
-            if (user.role !== selectedRole) {
-                errorMessage.textContent = 'Role mismatch. Please select the correct role: ' + user.role;
-                errorMessage.classList.add('show');
-                return;
-            }
-
-            sessionStorage.setItem('loggedInUser', JSON.stringify(user));
-            successMessage.textContent = 'Login successful! Welcome back, ' + user.name + '!';
-            successMessage.classList.add('show');
-            
-            setTimeout(() => {
-                if (user.role === 'student') {
-                    window.location.href = 'student-dashboard.html';
-                } else if (user.role === 'instructor') {
-                    window.location.href = 'instructor-dashboard.html';
-                } else if (user.role === 'administrator') {
-                    window.location.href = 'admin-dashboard.html';
-                } else if (user.role === 'data_analyst') {
-                    window.location.href = 'analyst-dashboard.html';
-                }
-            }, 1000);
         });
 
         document.getElementById('userid').addEventListener('input', function() {

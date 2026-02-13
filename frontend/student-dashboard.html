@@ -113,6 +113,22 @@
             gap: 1.5rem;
         }
 
+        .nav-logout {
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            background: rgba(255, 75, 75, 0.95);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .nav-logout:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 50, 50, 1);
+        }
+
         .user-profile {
             display: flex;
             align-items: center;
@@ -670,6 +686,7 @@
                     <div class="user-avatar" id="userAvatar">S</div>
                     <span class="user-name" id="userName">Student</span>
                 </div>
+                <button class="nav-logout" onclick="logout()">Logout</button>
             </div>
         </div>
     </nav>
@@ -711,6 +728,18 @@
                         <a href="#" class="sidebar-link" data-view="my-courses">
                             <span class="sidebar-icon">🎯</span>
                             <span>My Courses</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-link" data-view="ongoing-courses">
+                            <span class="sidebar-icon">▶️</span>
+                            <span>Ongoing Courses</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-link" data-view="completed-courses">
+                            <span class="sidebar-icon">✅</span>
+                            <span>Completed Courses</span>
                         </a>
                     </li>
                     <li>
@@ -815,10 +844,32 @@
 
                 <div id="wishlistCourses" class="courses-grid"></div>
             </div>
+
+            <!-- Ongoing Courses View -->
+            <div id="ongoingCoursesView" style="display: none;">
+                <div class="content-header">
+                    <h1 class="content-title">Ongoing Courses</h1>
+                    <p class="content-subtitle">Courses you're currently learning</p>
+                </div>
+
+                <div id="ongoingCourses" class="courses-grid"></div>
+            </div>
+
+            <!-- Completed Courses View -->
+            <div id="completedCoursesView" style="display: none;">
+                <div class="content-header">
+                    <h1 class="content-title">Completed Courses</h1>
+                    <p class="content-subtitle">Courses you've successfully completed</p>
+                </div>
+
+                <div id="completedCourses" class="courses-grid"></div>
+            </div>
         </main>
     </div>
 
     <script>
+        const API_BASE = 'http://localhost:3000';
+
         // Check if user is logged in
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
         if (!loggedInUser || loggedInUser.role !== 'student') {
@@ -829,436 +880,11 @@
         document.getElementById('userName').textContent = loggedInUser.name;
         document.getElementById('userAvatar').textContent = loggedInUser.name.charAt(0).toUpperCase();
 
-        // Course Data
-        const coursesData = [
-            {
-                id: 1,
-                title: "Complete Web Development Bootcamp",
-                university: "Stanford University",
-                instructor: "Dr. Angela Yu",
-                price: 599,
-                originalPrice: 3999,
-                rating: 4.8,
-                students: "245,682",
-                category: "technology",
-                icon: "💻",
-                bestseller: true,
-                featured: true,
-                trending: true
-            },
-            {
-                id: 2,
-                title: "Digital Marketing Masterclass",
-                university: "Harvard Business School",
-                instructor: "Prof. John Smith",
-                price: 549,
-                originalPrice: 3499,
-                rating: 4.7,
-                students: "189,321",
-                category: "marketing",
-                icon: "📱",
-                bestseller: true,
-                featured: true
-            },
-            {
-                id: 3,
-                title: "Data Science & Machine Learning",
-                university: "MIT",
-                instructor: "Dr. Andrew Ng",
-                price: 699,
-                originalPrice: 4499,
-                rating: 4.9,
-                students: "312,456",
-                category: "technology",
-                icon: "🤖",
-                bestseller: true,
-                trending: true,
-                featured: true
-            },
-            {
-                id: 4,
-                title: "UI/UX Design Complete Course",
-                university: "California Institute of Arts",
-                instructor: "Sarah Johnson",
-                price: 499,
-                originalPrice: 2999,
-                rating: 4.6,
-                students: "156,789",
-                category: "design",
-                icon: "🎨",
-                bestseller: false,
-                trending: true
-            },
-            {
-                id: 5,
-                title: "Financial Management & Investment",
-                university: "Wharton Business School",
-                instructor: "Prof. Michael Chen",
-                price: 649,
-                originalPrice: 3799,
-                rating: 4.7,
-                students: "198,234",
-                category: "business",
-                icon: "💰",
-                bestseller: true,
-                featured: true
-            },
-            {
-                id: 6,
-                title: "Python Programming Masterclass",
-                university: "UC Berkeley",
-                instructor: "Dr. Emily Rodriguez",
-                price: 549,
-                originalPrice: 3299,
-                rating: 4.8,
-                students: "267,891",
-                category: "technology",
-                icon: "🐍",
-                bestseller: true,
-                trending: true
-            },
-            {
-                id: 7,
-                title: "Content Marketing Strategy",
-                university: "Columbia Business School",
-                instructor: "Mark Thompson",
-                price: 449,
-                originalPrice: 2799,
-                rating: 4.5,
-                students: "134,567",
-                category: "marketing",
-                icon: "✍️",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 8,
-                title: "Graphic Design Fundamentals",
-                university: "Rhode Island School of Design",
-                instructor: "Jessica Lee",
-                price: 399,
-                originalPrice: 2499,
-                rating: 4.6,
-                students: "142,345",
-                category: "design",
-                icon: "🖌️",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 9,
-                title: "Business Analytics & Intelligence",
-                university: "London Business School",
-                instructor: "Prof. David Wilson",
-                price: 599,
-                originalPrice: 3599,
-                rating: 4.7,
-                students: "176,543",
-                category: "business",
-                icon: "📊",
-                bestseller: true,
-                featured: true
-            },
-            {
-                id: 10,
-                title: "Mobile App Development",
-                university: "Georgia Tech",
-                instructor: "Dr. Robert Kim",
-                price: 649,
-                originalPrice: 3899,
-                rating: 4.8,
-                students: "203,456",
-                category: "technology",
-                icon: "📱",
-                bestseller: true,
-                trending: true
-            },
-            {
-                id: 11,
-                title: "Yoga & Mindfulness Training",
-                university: "Duke Integrative Medicine",
-                instructor: "Priya Sharma",
-                price: 299,
-                originalPrice: 1999,
-                rating: 4.9,
-                students: "89,234",
-                category: "health",
-                icon: "🧘",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 12,
-                title: "Spanish Language Complete Course",
-                university: "University of Salamanca",
-                instructor: "Prof. Maria Garcia",
-                price: 399,
-                originalPrice: 2299,
-                rating: 4.7,
-                students: "124,567",
-                category: "language",
-                icon: "🗣️",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 13,
-                title: "Blockchain & Cryptocurrency",
-                university: "Stanford University",
-                instructor: "Dr. Chris Peterson",
-                price: 799,
-                originalPrice: 4999,
-                rating: 4.8,
-                students: "98,456",
-                category: "technology",
-                icon: "⛓️",
-                bestseller: true,
-                featured: true,
-                trending: true
-            },
-            {
-                id: 14,
-                title: "Photography Masterclass",
-                university: "New York Film Academy",
-                instructor: "James Anderson",
-                price: 549,
-                originalPrice: 3299,
-                rating: 4.7,
-                students: "87,234",
-                category: "photography",
-                icon: "📸",
-                bestseller: false,
-                trending: true
-            },
-            {
-                id: 15,
-                title: "Stock Trading & Investment",
-                university: "Yale School of Management",
-                instructor: "Prof. Richard Turner",
-                price: 699,
-                originalPrice: 4299,
-                rating: 4.6,
-                students: "145,678",
-                category: "finance",
-                icon: "📈",
-                bestseller: true,
-                featured: true
-            },
-            {
-                id: 16,
-                title: "Piano & Music Theory",
-                university: "Berklee College of Music",
-                instructor: "Prof. Lisa Martinez",
-                price: 499,
-                originalPrice: 2999,
-                rating: 4.9,
-                students: "76,543",
-                category: "music",
-                icon: "🎹",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 17,
-                title: "Italian Cuisine Cooking",
-                university: "Culinary Institute of America",
-                instructor: "Chef Antonio Rossi",
-                price: 449,
-                originalPrice: 2699,
-                rating: 4.8,
-                students: "92,345",
-                category: "cooking",
-                icon: "🍝",
-                bestseller: false,
-                trending: true
-            },
-            {
-                id: 18,
-                title: "Leadership & Management",
-                university: "Harvard Business School",
-                instructor: "Prof. Karen White",
-                price: 649,
-                originalPrice: 3799,
-                rating: 4.7,
-                students: "187,654",
-                category: "personal-dev",
-                icon: "👔",
-                bestseller: true,
-                featured: true
-            },
-            {
-                id: 19,
-                title: "Quantum Physics Fundamentals",
-                university: "Cambridge University",
-                instructor: "Dr. Stephen Clarke",
-                price: 599,
-                originalPrice: 3499,
-                rating: 4.6,
-                students: "54,321",
-                category: "science",
-                icon: "⚛️",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 20,
-                title: "Oil Painting Techniques",
-                university: "Florence Academy of Art",
-                instructor: "Sofia Romano",
-                price: 529,
-                originalPrice: 3199,
-                rating: 4.8,
-                students: "63,789",
-                category: "arts",
-                icon: "🎨",
-                bestseller: false,
-                trending: true
-            },
-            {
-                id: 21,
-                title: "Cloud Computing with AWS",
-                university: "Amazon Web Services",
-                instructor: "Dr. Alan Cooper",
-                price: 749,
-                originalPrice: 4599,
-                rating: 4.9,
-                students: "198,765",
-                category: "technology",
-                icon: "☁️",
-                bestseller: true,
-                featured: true,
-                trending: true
-            },
-            {
-                id: 22,
-                title: "Social Media Marketing",
-                university: "Northwestern University",
-                instructor: "Sarah Mitchell",
-                price: 449,
-                originalPrice: 2799,
-                rating: 4.5,
-                students: "156,432",
-                category: "marketing",
-                icon: "📱",
-                bestseller: false,
-                trending: true
-            },
-            {
-                id: 23,
-                title: "French Language Intensive",
-                university: "Sorbonne University",
-                instructor: "Prof. Jean Dubois",
-                price: 449,
-                originalPrice: 2699,
-                rating: 4.7,
-                students: "112,345",
-                category: "language",
-                icon: "🇫🇷",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 24,
-                title: "Portrait Photography Pro",
-                university: "London College of Communication",
-                instructor: "Emma Thompson",
-                price: 599,
-                originalPrice: 3499,
-                rating: 4.8,
-                students: "78,901",
-                category: "photography",
-                icon: "📷",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 25,
-                title: "Cryptocurrency Trading",
-                university: "MIT Sloan",
-                instructor: "Dr. Michael Zhang",
-                price: 699,
-                originalPrice: 4299,
-                rating: 4.6,
-                students: "134,567",
-                category: "finance",
-                icon: "💰",
-                bestseller: true,
-                trending: true
-            },
-            {
-                id: 26,
-                title: "Guitar Mastery Course",
-                university: "Musicians Institute",
-                instructor: "Carlos Santana Jr.",
-                price: 549,
-                originalPrice: 3299,
-                rating: 4.9,
-                students: "89,234",
-                category: "music",
-                icon: "🎸",
-                bestseller: false,
-                featured: true
-            },
-            {
-                id: 27,
-                title: "Pastry & Baking Essentials",
-                university: "Le Cordon Bleu",
-                instructor: "Chef Marie Laurent",
-                price: 499,
-                originalPrice: 2999,
-                rating: 4.8,
-                students: "95,678",
-                category: "cooking",
-                icon: "🍰",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 28,
-                title: "Public Speaking Mastery",
-                university: "Carnegie Mellon",
-                instructor: "Prof. Robert Williams",
-                price: 399,
-                originalPrice: 2399,
-                rating: 4.7,
-                students: "167,890",
-                category: "personal-dev",
-                icon: "🎤",
-                bestseller: false,
-                trending: true
-            },
-            {
-                id: 29,
-                title: "Marine Biology",
-                university: "University of California",
-                instructor: "Dr. Jessica Parker",
-                price: 549,
-                originalPrice: 3299,
-                rating: 4.6,
-                students: "67,543",
-                category: "science",
-                icon: "🐠",
-                bestseller: false,
-                new: true
-            },
-            {
-                id: 30,
-                title: "Classical Sculpture",
-                university: "Royal College of Art",
-                instructor: "Prof. Marcus Stone",
-                price: 579,
-                originalPrice: 3499,
-                rating: 4.7,
-                students: "45,678",
-                category: "arts",
-                icon: "🗿",
-                bestseller: false,
-                new: true
-            }
-        ];
+        // Course data will now be loaded from the backend API
+        let coursesData = [];
 
         let currentCategory = 'all';
-        let enrolledCourses = JSON.parse(localStorage.getItem('enrolled_' + loggedInUser.userid)) || [];
+        let enrolledCourses = [];
         let wishlistCourses = JSON.parse(localStorage.getItem('wishlist_' + loggedInUser.userid)) || [];
         let currentFilter = null;
 
@@ -1344,18 +970,13 @@
             renderWishlist();
         }
 
-        // Explore course - will navigate to course page (to be created)
+        // Explore course - navigate to course page
         function exploreCourse(courseId) {
             const course = coursesData.find(c => c.id === courseId);
             if (!course) return;
             
-            // For now, store course ID and show alert
-            // In future, this will navigate to course-details.html
-            sessionStorage.setItem('selectedCourse', JSON.stringify(course));
-            alert('Course page for "' + course.title + '" will be created soon!\n\nYou can explore:\n• Course curriculum\n• Instructor details\n• Student reviews\n• Enroll in the course');
-            
-            // Uncomment this line when course page is ready:
-            // window.location.href = 'course-details.html?id=' + courseId;
+            // Navigate to course page with course ID
+            window.location.href = 'course-page.html?id=' + courseId;
         }
 
         // Render my courses
@@ -1373,10 +994,16 @@
                 return;
             }
 
+            // Get full course data for enrolled courses
+            const enrolledCoursesData = enrolledCourses.map(enrolled => {
+                const course = coursesData.find(c => c.id === enrolled.id);
+                return { ...course, progress: enrolled.progress, status: enrolled.status };
+            }).filter(course => course.id);
+
             container.innerHTML = `
                 <h2 class="progress-title">Continue Learning</h2>
-                ${enrolledCourses.map(course => `
-                    <div class="progress-card">
+                ${enrolledCoursesData.map(course => `
+                    <div class="progress-card" onclick="exploreCourse(${course.id})" style="cursor: pointer;">
                         <div class="progress-course-img">${course.icon}</div>
                         <div class="progress-course-info">
                             <div class="progress-course-title">${course.title}</div>
@@ -1388,6 +1015,108 @@
                     </div>
                 `).join('')}
             `;
+        }
+
+        // Render ongoing courses
+        function renderOngoingCourses() {
+            const container = document.getElementById('ongoingCourses');
+            
+            // Filter courses that are in progress
+            const ongoing = enrolledCourses
+                .filter(enrolled => enrolled.status === 'active')
+                .map(enrolled => {
+                    const course = coursesData.find(c => c.id === enrolled.id);
+                    return { ...course, progress: enrolled.progress, status: enrolled.status };
+                })
+                .filter(course => course.id);
+
+            if (ongoing.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">▶️</div>
+                        <h2 class="empty-title">No Ongoing Courses</h2>
+                        <p class="empty-text">Start a course to see it here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = ongoing.map(course => `
+                <div class="course-card" onclick="exploreCourse(${course.id})">
+                    <div class="course-image">
+                        <span style="font-size: 3rem;">${course.icon}</span>
+                        <span class="course-badge" style="background: linear-gradient(135deg, #4fc3f7, #29b6f6);">In Progress</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-university">${course.university}</div>
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-instructor">${course.instructor}</p>
+                        <div class="course-meta">
+                            <span class="course-rating">⭐ ${course.rating}</span>
+                            <span class="course-students">👥 ${course.students}</span>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <div class="progress-bar-container" style="height: 8px; background: var(--bg-light); border-radius: 4px; overflow: hidden;">
+                                <div class="progress-bar" style="width: ${course.progress}%; height: 100%; background: linear-gradient(90deg, #4fc3f7, #29b6f6);"></div>
+                            </div>
+                            <div class="progress-text" style="text-align: center; margin-top: 0.5rem; color: var(--text-gray); font-size: 0.85rem;">${course.progress}% complete</div>
+                        </div>
+                        <button class="enroll-btn" onclick="event.stopPropagation(); exploreCourse(${course.id})" style="margin-top: 1rem;">
+                            Continue Learning 📚
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render completed courses
+        function renderCompletedCourses() {
+            const container = document.getElementById('completedCourses');
+            
+            // Filter courses that are completed
+            const completed = enrolledCourses
+                .filter(enrolled => enrolled.status === 'completed')
+                .map(enrolled => {
+                    const course = coursesData.find(c => c.id === enrolled.id);
+                    return { ...course, progress: enrolled.progress, status: enrolled.status };
+                })
+                .filter(course => course.id);
+
+            if (completed.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">✅</div>
+                        <h2 class="empty-title">No Completed Courses</h2>
+                        <p class="empty-text">Complete a course to earn your certificate</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = completed.map(course => `
+                <div class="course-card" onclick="exploreCourse(${course.id})">
+                    <div class="course-image">
+                        <span style="font-size: 3rem;">${course.icon}</span>
+                        <span class="course-badge" style="background: linear-gradient(135deg, #4caf50, #45a049);">Completed ✓</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-university">${course.university}</div>
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-instructor">${course.instructor}</p>
+                        <div class="course-meta">
+                            <span class="course-rating">⭐ ${course.rating}</span>
+                            <span class="course-students">👥 ${course.students}</span>
+                        </div>
+                        <div style="margin-top: 1rem; text-align: center; padding: 0.75rem; background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(69, 160, 73, 0.1)); border-radius: 8px;">
+                            <div style="font-size: 1.5rem;">🏆</div>
+                            <div style="color: #4caf50; font-weight: 600; margin-top: 0.25rem;">Certificate Available</div>
+                        </div>
+                        <button class="enroll-btn" onclick="event.stopPropagation(); exploreCourse(${course.id})" style="margin-top: 1rem; background: linear-gradient(135deg, #4caf50, #45a049);">
+                            View Certificate 📜
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // Render wishlist
@@ -1482,6 +1211,8 @@
                 document.getElementById('myCoursesView').style.display = 'none';
                 document.getElementById('paymentsView').style.display = 'none';
                 document.getElementById('wishlistView').style.display = 'none';
+                document.getElementById('ongoingCoursesView').style.display = 'none';
+                document.getElementById('completedCoursesView').style.display = 'none';
 
                 if (view === 'all-courses') {
                     document.getElementById('allCoursesView').style.display = 'block';
@@ -1490,6 +1221,12 @@
                 } else if (view === 'my-courses') {
                     document.getElementById('myCoursesView').style.display = 'block';
                     renderMyCourses();
+                } else if (view === 'ongoing-courses') {
+                    document.getElementById('ongoingCoursesView').style.display = 'block';
+                    renderOngoingCourses();
+                } else if (view === 'completed-courses') {
+                    document.getElementById('completedCoursesView').style.display = 'block';
+                    renderCompletedCourses();
                 } else if (view === 'payments') {
                     document.getElementById('paymentsView').style.display = 'block';
                 } else if (view === 'wishlist') {
@@ -1510,6 +1247,8 @@
                 document.getElementById('myCoursesView').style.display = 'none';
                 document.getElementById('paymentsView').style.display = 'none';
                 document.getElementById('wishlistView').style.display = 'none';
+                document.getElementById('ongoingCoursesView').style.display = 'none';
+                document.getElementById('completedCoursesView').style.display = 'none';
                 
                 // Update active state
                 document.querySelectorAll('.sidebar-link[data-view]').forEach(l => l.classList.remove('active'));
@@ -1585,14 +1324,69 @@
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 sessionStorage.removeItem('loggedInUser');
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
         }
 
-        // Initial render
-        renderCourses();
-        renderMyCourses();
-        renderWishlist();
+        // Load enrollments for the current student from backend
+        async function loadEnrollments() {
+            try {
+                const response = await fetch(`${API_BASE}/api/students/${encodeURIComponent(loggedInUser.userid)}/enrollments`);
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error('Unexpected enrollments response');
+                }
+
+                enrolledCourses = data.map(e => ({
+                    id: e.course_id,
+                    progress: e.progress ?? 0,
+                    status: e.status || 'active',
+                }));
+
+                renderMyCourses();
+                renderOngoingCourses();
+                renderCompletedCourses();
+            } catch (err) {
+                console.error('Failed to load enrollments from API:', err);
+            }
+        }
+
+        // Load courses from backend and then render all views
+        async function loadCourses() {
+            try {
+                const response = await fetch(`${API_BASE}/api/courses`);
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error('Unexpected courses response');
+                }
+
+                // Format students with commas for display
+                coursesData = data.map(c => ({
+                    ...c,
+                    students: c.students != null ? c.students.toLocaleString('en-IN') : '0',
+                    new: c.isNew, // keep compatibility with existing code expecting "new"
+                }));
+
+                renderCourses(currentCategory, currentFilter);
+                await loadEnrollments();
+                renderWishlist();
+            } catch (err) {
+                console.error('Failed to load courses from API:', err);
+                const coursesGrid = document.getElementById('coursesGrid');
+                coursesGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-icon">⚠️</div>
+                        <h2 class="empty-title">Unable to load courses</h2>
+                        <p class="empty-text">Please ensure the backend server is running on ${API_BASE}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initial load
+        loadCourses();
     </script>
 </body>
 </html>

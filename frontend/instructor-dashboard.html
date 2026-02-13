@@ -767,6 +767,13 @@
             <p class="section-subtitle">Manage your courses and track student progress</p>
         </div>
 
+        <div style="display:flex; justify-content:flex-end; margin: -1rem 0 1.5rem;">
+            <button class="btn btn-upload" onclick="openAddCourseModal()">
+                <span>➕</span>
+                <span>Add Course</span>
+            </button>
+        </div>
+
         <div class="courses-grid" id="coursesGrid">
             <!-- Courses will be dynamically loaded here -->
         </div>
@@ -774,7 +781,7 @@
         <div class="empty-state" id="emptyState" style="display: none;">
             <div class="empty-icon">📚</div>
             <h3 class="empty-title">No Courses Yet</h3>
-            <p class="empty-text">You haven't been assigned any courses. Contact the administrator for course assignments.</p>
+            <p class="empty-text">You don't have any courses yet. Click "Add Course" to create one for admin approval.</p>
         </div>
 
         <!-- Profile Section -->
@@ -800,7 +807,7 @@
                     </div>
                     <div class="detail-item" style="padding: 1.5rem; background: rgba(79, 195, 247, 0.08); border-radius: 12px; border-left: 4px solid #4fc3f7;">
                         <div class="detail-label" style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Member Since</div>
-                        <div class="detail-value" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-dark);">January 2024</div>
+                        <div class="detail-value" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-dark);" id="profileMemberSince">-</div>
                     </div>
                 </div>
             </div>
@@ -864,16 +871,17 @@
                     <label class="form-label">Content Type</label>
                     <select class="form-select" id="contentType" required>
                         <option value="">Select content type</option>
-                        <option value="lecture">Lecture Video</option>
-                        <option value="notes">Study Notes</option>
-                        <option value="assignment">Assignment</option>
-                        <option value="quiz">Quiz</option>
-                        <option value="reading">Reading Material</option>
+                        <option value="video">Lecture Video</option>
+                        <option value="note">Study Notes / PDF / Link</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Description</label>
                     <textarea class="form-textarea" id="contentDescription" required placeholder="Describe the content..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Content Link (URL)</label>
+                    <input type="url" class="form-input" id="contentLink" placeholder="https://...">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Upload File</label>
@@ -890,78 +898,57 @@
         </div>
     </div>
 
-    <script>
-        // Sample data - In production, this would come from a backend database
-        const sampleCourses = [
-            {
-                id: 1,
-                title: "Introduction to Data Science",
-                university: "Stanford University",
-                fee: 25000,
-                instructorPay: 18000,
-                enrollmentCount: 45,
-                students: [
-                    { id: "STU001", name: "Rahul Sharma" },
-                    { id: "STU002", name: "Priya Patel" },
-                    { id: "STU003", name: "Amit Kumar" },
-                    { id: "STU004", name: "Sneha Reddy" },
-                    { id: "STU005", name: "Vikram Singh" }
-                ]
-            },
-            {
-                id: 2,
-                title: "Web Development Bootcamp",
-                university: "MIT",
-                fee: 30000,
-                instructorPay: 22000,
-                enrollmentCount: 62,
-                students: [
-                    { id: "STU006", name: "Anjali Verma" },
-                    { id: "STU007", name: "Rohan Gupta" },
-                    { id: "STU008", name: "Pooja Nair" }
-                ]
-            },
-            {
-                id: 3,
-                title: "Machine Learning Fundamentals",
-                university: "Harvard University",
-                fee: 35000,
-                instructorPay: 26000,
-                enrollmentCount: 38,
-                students: [
-                    { id: "STU009", name: "Karthik Krishnan" },
-                    { id: "STU010", name: "Divya Mehta" }
-                ]
-            },
-            {
-                id: 4,
-                title: "Digital Marketing Mastery",
-                university: "Oxford University",
-                fee: 20000,
-                instructorPay: 15000,
-                enrollmentCount: 51,
-                students: [
-                    { id: "STU011", name: "Sanjay Joshi" },
-                    { id: "STU012", name: "Neha Kapoor" }
-                ]
-            }
-        ];
+    <!-- Add Course Modal -->
+    <div class="modal" id="addCourseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Course</h3>
+                <button class="modal-close" onclick="closeModal('addCourseModal')">&times;</button>
+            </div>
+            <form class="upload-form" id="addCourseForm" onsubmit="handleCreateCourse(event)">
+                <div class="form-group">
+                    <label class="form-label">Course Name</label>
+                    <input type="text" class="form-input" id="newCourseTitle" required placeholder="e.g., Introduction to SQL">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Course Level</label>
+                    <select class="form-select" id="newCourseLevel" required>
+                        <option value="">Select level</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Course Price (₹)</label>
+                    <input type="number" min="0" step="1" class="form-input" id="newCoursePrice" required placeholder="e.g., 999">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">University</label>
+                    <input type="text" class="form-input" id="newCourseUniversity" required placeholder="e.g., IIT Kharagpur">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Course Description</label>
+                    <textarea class="form-textarea" id="newCourseDescription" required placeholder="Briefly describe what students will learn..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Submit for Admin Approval</button>
+            </form>
+        </div>
+    </div>
 
+    <script>
+        const API_BASE = 'http://localhost:3000';
         let currentCourse = null;
+        let instructorCourses = [];
+        let loggedInUser = null;
 
         // Initialize dashboard
         function initDashboard() {
-            let loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-            
-            // For demo purposes, create a sample instructor if not logged in
+            loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
             if (!loggedInUser || loggedInUser.role !== 'instructor') {
-                const demoInstructor = {
-                    name: 'Dr. Sarah Johnson',
-                    email: 'sarah.johnson@learnx.com',
-                    role: 'instructor'
-                };
-                sessionStorage.setItem('loggedInUser', JSON.stringify(demoInstructor));
-                loggedInUser = demoInstructor;
+                alert('Please login as instructor');
+                window.location.href = 'login.html';
+                return;
             }
 
             // Set user info in header
@@ -973,49 +960,74 @@
             // Set profile section
             document.getElementById('profileName').textContent = loggedInUser.name;
             document.getElementById('profileEmail').textContent = loggedInUser.email;
+            if (loggedInUser.created_at) {
+                const d = new Date(loggedInUser.created_at);
+                const options = { year: 'numeric', month: 'long' };
+                document.getElementById('profileMemberSince').textContent =
+                    d.toLocaleDateString('en-US', options);
+            } else {
+                document.getElementById('profileMemberSince').textContent = '-';
+            }
 
-            // Load courses
-            loadCourses();
+            // Load dashboard from backend
+            loadDashboard();
         }
 
-        function loadCourses() {
+        async function loadDashboard() {
+            try {
+                const resp = await fetch(`${API_BASE}/api/instructors/${encodeURIComponent(loggedInUser.userid)}/dashboard`);
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data?.message || 'Failed to load dashboard');
+
+                const stats = data.stats || {};
+                instructorCourses = Array.isArray(data.courses) ? data.courses : [];
+
+                document.getElementById('totalCourses').textContent = stats.totalCourses ?? 0;
+                document.getElementById('totalStudents').textContent = stats.totalStudents ?? 0;
+                document.getElementById('totalEarnings').textContent = `₹${(stats.totalEarnings ?? 0).toLocaleString('en-IN')}`;
+
+                renderCourses();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('totalCourses').textContent = 0;
+                document.getElementById('totalStudents').textContent = 0;
+                document.getElementById('totalEarnings').textContent = '₹0';
+                renderCourses();
+            }
+        }
+
+        function renderCourses() {
             const coursesGrid = document.getElementById('coursesGrid');
             const emptyState = document.getElementById('emptyState');
             
-            if (sampleCourses.length === 0) {
+            if (!instructorCourses || instructorCourses.length === 0) {
                 coursesGrid.style.display = 'none';
                 emptyState.style.display = 'block';
                 return;
             }
-
-            // Calculate totals
-            const totalStudents = sampleCourses.reduce((sum, course) => sum + course.enrollmentCount, 0);
-            const totalEarnings = sampleCourses.reduce((sum, course) => sum + course.instructorPay, 0);
-
-            document.getElementById('totalCourses').textContent = sampleCourses.length;
-            document.getElementById('totalStudents').textContent = totalStudents;
-            document.getElementById('totalEarnings').textContent = `₹${totalEarnings.toLocaleString()}`;
+            coursesGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
 
             // Render courses
-            coursesGrid.innerHTML = sampleCourses.map(course => `
+            coursesGrid.innerHTML = instructorCourses.map(course => `
                 <div class="course-card">
                     <div class="course-header">
                         <h3 class="course-title">${course.title}</h3>
-                        <p class="course-university">${course.university}</p>
+                        <p class="course-university">${course.status === 'pending' ? 'Pending Approval' : (course.university || 'Approved')}</p>
                     </div>
                     <div class="course-body">
                         <div class="course-stats">
                             <div class="stat-item">
                                 <span class="stat-icon">👥</span>
                                 <div class="stat-content">
-                                    <div class="stat-value">${course.enrollmentCount}</div>
+                                    <div class="stat-value">0</div>
                                     <div class="stat-text">Students</div>
                                 </div>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-icon">💰</span>
                                 <div class="stat-content">
-                                    <div class="stat-value">₹${course.instructorPay.toLocaleString()}</div>
+                                    <div class="stat-value">₹0</div>
                                     <div class="stat-text">Your Pay</div>
                                 </div>
                             </div>
@@ -1025,9 +1037,17 @@
                                 <span>📊</span>
                                 <span>View Stats</span>
                             </button>
-                            <button class="btn btn-upload" onclick="openUploadModal(${course.id})">
+                            <button class="btn btn-upload" onclick="openUploadModal(${course.id})" ${course.status === 'pending' ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''}>
                                 <span>📤</span>
                                 <span>Upload Content</span>
+                            </button>
+                            <button class="btn btn-view" onclick="openCoursePage(${course.id})">
+                                <span>📖</span>
+                                <span>View Page</span>
+                            </button>
+                            <button class="btn btn-upload" style="background:#ff6b6b;border:none;" onclick="deleteCourse(${course.id})">
+                                <span>🗑️</span>
+                                <span>Delete</span>
                             </button>
                         </div>
                     </div>
@@ -1036,46 +1056,87 @@
         }
 
         function viewCourseDetails(courseId) {
-            const course = sampleCourses.find(c => c.id === courseId);
+            const course = instructorCourses.find(c => c.id === courseId);
             if (!course) return;
 
             currentCourse = course;
 
             document.getElementById('modalCourseTitle').textContent = course.title;
-            document.getElementById('modalCourseFee').textContent = `₹${course.fee.toLocaleString()}`;
-            document.getElementById('modalInstructorPay').textContent = `₹${course.instructorPay.toLocaleString()}`;
-            document.getElementById('modalUniversity').textContent = course.university;
-            document.getElementById('modalEnrollmentCount').textContent = course.enrollmentCount;
+            document.getElementById('modalCourseFee').textContent = `₹${Number(course.price || 0).toLocaleString('en-IN')}`;
+            document.getElementById('modalInstructorPay').textContent = `₹0`;
+            document.getElementById('modalUniversity').textContent = course.status === 'pending' ? 'Pending Approval' : (course.university || '-');
+            document.getElementById('modalEnrollmentCount').textContent = 0;
 
             openModal('courseModal');
         }
 
         function viewEnrollment(courseId) {
-            const course = sampleCourses.find(c => c.id === courseId);
+            const course = instructorCourses.find(c => c.id === courseId);
             if (!course) return;
 
             const enrollmentList = document.getElementById('enrollmentList');
-            enrollmentList.innerHTML = course.students.map(student => `
+            enrollmentList.innerHTML = `
                 <li class="enrollment-item">
-                    <div class="student-avatar">${student.name.charAt(0)}</div>
                     <div class="student-info">
-                        <div class="student-name">${student.name}</div>
-                        <div class="student-id">${student.id}</div>
+                        <div class="student-name">Student list will appear here once enrollments are implemented per-course.</div>
                     </div>
                 </li>
-            `).join('');
+            `;
 
             openModal('enrollmentModal');
         }
 
+        function openCoursePage(courseId) {
+            window.location.href = `course-page.html?id=${encodeURIComponent(courseId)}`;
+        }
+
         function openUploadModal(courseId) {
-            const course = sampleCourses.find(c => c.id === courseId);
+            const course = instructorCourses.find(c => c.id === courseId);
             if (!course) return;
+            if (course.status === 'pending') {
+                alert('This course is pending admin approval. You can upload content after approval.');
+                return;
+            }
 
             currentCourse = course;
             document.getElementById('uploadForm').reset();
             document.getElementById('fileNameDisplay').textContent = 'Choose a file';
             openModal('uploadModal');
+        }
+
+        function openAddCourseModal() {
+            document.getElementById('addCourseForm').reset();
+            openModal('addCourseModal');
+        }
+
+        async function handleCreateCourse(event) {
+            event.preventDefault();
+            const title = document.getElementById('newCourseTitle').value.trim();
+            const level = document.getElementById('newCourseLevel').value;
+            const priceRaw = document.getElementById('newCoursePrice').value;
+            const university = document.getElementById('newCourseUniversity').value.trim();
+            const description = document.getElementById('newCourseDescription').value.trim();
+            const price = Number(priceRaw);
+            if (!title || !description) return alert('Please enter course name and description');
+            if (!level) return alert('Please select a course level');
+            if (!university) return alert('Please enter university name');
+            if (!Number.isFinite(price) || price <= 0) return alert('Please enter a valid positive price');
+
+            try {
+                const resp = await fetch(`${API_BASE}/api/instructors/${encodeURIComponent(loggedInUser.userid)}/courses`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, price, level, university })
+                });
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data?.message || 'Failed to create course');
+                closeModal('addCourseModal');
+                await loadDashboard();
+                alert('Course created and submitted for admin approval.');
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Failed to create course');
+            }
         }
 
         function updateFileName(input) {
@@ -1086,20 +1147,54 @@
         function handleUpload(event) {
             event.preventDefault();
 
-            const title = document.getElementById('contentTitle').value;
+            const title = document.getElementById('contentTitle').value.trim();
             const type = document.getElementById('contentType').value;
-            const description = document.getElementById('contentDescription').value;
-            const file = document.getElementById('contentFile').files[0];
+            const description = document.getElementById('contentDescription').value.trim();
+            const link = document.getElementById('contentLink').value.trim();
 
             if (!currentCourse) {
                 alert('No course selected');
                 return;
             }
 
-            // In production, this would upload to server
-            alert(`Content uploaded successfully!\n\nCourse: ${currentCourse.title}\nTitle: ${title}\nType: ${type}\nFile: ${file?.name || 'No file selected'}`);
-            
-            closeModal('uploadModal');
+            (async () => {
+                try {
+                    const resp = await fetch(`${API_BASE}/api/instructors/${encodeURIComponent(loggedInUser.userid)}/courses/${currentCourse.id}/contents`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, type, description, link })
+                    });
+                    const data = await resp.json();
+                    if (!resp.ok) throw new Error(data?.message || 'Failed to upload content');
+                    alert(`Content uploaded successfully! Course duration updated to ${data.duration}.`);
+                    closeModal('uploadModal');
+                    await loadDashboard();
+                } catch (err) {
+                    console.error(err);
+                    alert(err.message || 'Failed to upload content');
+                }
+            })();
+        }
+
+        async function deleteCourse(courseId) {
+            const course = instructorCourses.find(c => c.id === courseId);
+            if (!course) return;
+            if (!confirm('Are you sure you want to delete this course? All enrolled students will be unenrolled.')) {
+                return;
+            }
+
+            try {
+                const resp = await fetch(`${API_BASE}/api/instructors/${encodeURIComponent(loggedInUser.userid)}/courses/${courseId}`, {
+                    method: 'DELETE'
+                });
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data?.message || 'Failed to delete course');
+                await loadDashboard();
+                alert('Course deleted successfully.');
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Failed to delete course');
+            }
         }
 
         function openModal(modalId) {
@@ -1113,8 +1208,7 @@
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 sessionStorage.removeItem('loggedInUser');
-                alert('Logged out successfully! In production, this would redirect to the login page.');
-                // window.location.href = 'login.html';
+                window.location.href = 'login.html';
             }
         }
 

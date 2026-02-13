@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - LearnX</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -15,11 +15,18 @@
         :root {
             --primary-dark: #0a3d4a;
             --primary-teal: #1a5f6f;
-            --bg-light: #f8f9fa;
+            --accent-gold: #f4a945;
+            --accent-coral: #ff8b7b;
+            --accent-yellow: #ffd966;
+            --light-teal: #7ec4c4;
+            --text-white: #ffffff;
             --text-dark: #1a1a1a;
-            --text-gray: #666;
-            --border-color: #e0e0e0;
-            --accent-blue: #4fc3f7;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: rgba(26, 95, 111, 0.2);
+            --bg-light: #f8f9fa;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
         }
 
         body {
@@ -27,13 +34,14 @@
             background: var(--bg-light);
         }
 
-        .top-nav {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1rem 2rem;
+        /* ================= NAVBAR ================= */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1.2rem 5%;
+            background: var(--primary-dark);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
         }
 
         .logo-section {
@@ -43,389 +51,410 @@
         }
 
         .logo-icon {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             background: linear-gradient(135deg, #4fc3f7, #29b6f6);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 26px;
         }
 
         .logo-text {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--primary-dark);
+            color: var(--text-white);
         }
 
-        .admin-badge {
-            background: #ff4b4b;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .logout-btn {
-            padding: 0.7rem 1.5rem;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
+        .profile-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd966, #f4a945);
+            color: #0a3d4a;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .logout-btn:hover {
-            background: #5568d3;
-        }
-
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
+        /* ================= HEADER ================= */
         .dashboard-header {
-            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-teal), var(--light-teal));
+            padding: 3rem 5%;
+            color: white;
         }
 
         .dashboard-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
         }
 
         .dashboard-subtitle {
-            color: var(--text-gray);
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
+        /* ================= MAIN ================= */
+        .dashboard-main {
+            padding: 3rem 5%;
+            max-width: 1300px;
+            margin: auto;
+        }
+
+        /* ================= STATS CARDS ================= */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
         }
 
         .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid var(--card-border);
+            transition: 0.3s ease;
         }
 
-        .stat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
         }
 
         .stat-label {
-            color: var(--text-gray);
-            font-size: 0.95rem;
-        }
-
-        .users-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            background: var(--bg-light);
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s ease;
+            color: #666;
         }
 
-        .filter-btn:hover,
-        .filter-btn.active {
-            background: var(--accent-blue);
+        /* ================= QUICK LINKS ================= */
+        .quick-links {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid var(--card-border);
+        }
+
+        .quick-links h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .admin-link {
+            background: linear-gradient(135deg, var(--primary-teal), var(--light-teal));
             color: white;
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .users-table thead {
-            background: var(--bg-light);
-        }
-
-        .users-table th {
-            padding: 1rem;
-            text-align: left;
+            text-decoration: none;
+            padding: 1.2rem;
+            border-radius: 12px;
             font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .users-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .users-table tr:hover {
-            background: var(--bg-light);
-        }
-
-        .role-badge {
-            padding: 0.35rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .role-student {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .role-instructor {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
-        .role-admin {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        .role-analyst {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .empty-state {
             text-align: center;
-            padding: 3rem;
-            color: var(--text-gray);
+            transition: 0.3s ease;
         }
 
-        .empty-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .users-table {
-                font-size: 0.85rem;
-            }
-
-            .users-table th,
-            .users-table td {
-                padding: 0.5rem;
-            }
+        .admin-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26,95,111,0.3);
         }
     </style>
 </head>
 <body>
-    <nav class="top-nav">
-        <div class="logo-section">
-            <div class="logo-icon">🎓</div>
-            <span class="logo-text">LearnX</span>
-            <span class="admin-badge">ADMIN</span>
-        </div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-    </nav>
 
-    <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Administrator Dashboard</h1>
-            <p class="dashboard-subtitle">Manage users and monitor platform activity</p>
-        </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo-section">
+        <div class="logo-icon">🎓</div>
+        <span class="logo-text">LearnX Admin</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:1rem;">
+        <div class="profile-circle" id="adminAvatar">AD</div>
+        <button onclick="adminLogout()" style="padding:0.5rem 1.1rem; border-radius:999px; border:none; background:#ff6b6b; color:#fff; font-weight:600; cursor:pointer;">Logout</button>
+    </div>
+</nav>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">👥</div>
-                <div class="stat-value" id="totalUsers">0</div>
-                <div class="stat-label">Total Users</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🎓</div>
-                <div class="stat-value" id="totalStudents">0</div>
-                <div class="stat-label">Students</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">👨‍🏫</div>
-                <div class="stat-value" id="totalInstructors">0</div>
-                <div class="stat-label">Instructors</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-value" id="totalAnalysts">0</div>
-                <div class="stat-label">Data Analysts</div>
-            </div>
+<!-- HEADER -->
+<section class="dashboard-header">
+    <h1 class="dashboard-title">Admin Dashboard</h1>
+    <p class="dashboard-subtitle">System Management Overview</p>
+</section>
+
+<!-- MAIN CONTENT -->
+<main class="dashboard-main">
+
+    <!-- STATISTICS -->
+    <section class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="totalUsers">5,842</div>
+            <div class="stat-label">Total Users</div>
         </div>
 
-        <div class="users-section">
-            <div class="section-header">
-                <h2 class="section-title">All Registered Users</h2>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="student">Students</button>
-                    <button class="filter-btn" data-filter="instructor">Instructors</button>
-                    <button class="filter-btn" data-filter="data_analyst">Analysts</button>
+        <div class="stat-card">
+            <div class="stat-value" id="totalCourses">124</div>
+            <div class="stat-label">Total Courses</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value" id="totalEnrollments">25,847</div>
+            <div class="stat-label">Total Enrollments</div>
+        </div>
+    </section>
+
+    <section class="quick-links" style="margin-bottom: 2rem;">
+        <h3>Pending Course Approvals</h3>
+        <div id="pendingCoursesList" class="links-grid"></div>
+        <div id="pendingEmpty" style="color:#666; margin-top: 1rem; display:none;">No pending courses.</div>
+    </section>
+
+    <!-- QUICK LINKS -->
+    <section class="quick-links">
+        <h3>Management Panel</h3>
+        <div class="links-grid">
+            <a href="manage-courses.html" class="admin-link">📚 Manage Courses</a>
+        </div>
+    </section>
+
+    <!-- USER MANAGEMENT -->
+    <section class="quick-links" style="margin-top: 2rem;">
+        <h3>User Management</h3>
+        <div style="margin-top: 1rem; background: #ffffff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 8px 25px rgba(0,0,0,0.08); border: 1px solid rgba(26,95,111,0.15);">
+            <form id="adminCreateUserForm" class="admin-user-form" style="display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 1rem; align-items:end; margin-bottom:1.5rem;">
+                <div>
+                    <label style="font-size:0.9rem; font-weight:600; color:#0a3d4a;">User ID</label>
+                    <input type="text" id="newUserId" required placeholder="e.g., stu123" style="width:100%; padding:0.6rem 0.8rem; border-radius:8px; border:1px solid #ddd;">
                 </div>
-            </div>
+                <div>
+                    <label style="font-size:0.9rem; font-weight:600; color:#0a3d4a;">Name</label>
+                    <input type="text" id="newUserName" required placeholder="Full name" style="width:100%; padding:0.6rem 0.8rem; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                <div>
+                    <label style="font-size:0.9rem; font-weight:600; color:#0a3d4a;">Email</label>
+                    <input type="email" id="newUserEmail" required placeholder="email@example.com" style="width:100%; padding:0.6rem 0.8rem; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                <div>
+                    <label style="font-size:0.9rem; font-weight:600; color:#0a3d4a;">Role</label>
+                    <select id="newUserRole" required style="width:100%; padding:0.6rem 0.8rem; border-radius:8px; border:1px solid #ddd;">
+                        <option value="">Select role</option>
+                        <option value="student">Student</option>
+                        <option value="instructor">Instructor</option>
+                        <option value="data_analyst">Data Analyst</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size:0.9rem; font-weight:600; color:#0a3d4a;">Password</label>
+                    <input type="password" id="newUserPassword" required placeholder="Set initial password" style="width:100%; padding:0.6rem 0.8rem; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                <div>
+                    <button type="submit" style="width:100%; padding:0.8rem 1rem; border:none; border-radius:8px; background:#1a5f6f; color:#fff; font-weight:600; cursor:pointer;">
+                        ➕ Add User
+                    </button>
+                </div>
+            </form>
 
-            <div style="overflow-x: auto;">
-                <table class="users-table">
+            <div style="max-height:260px; overflow:auto; border-radius:12px; border:1px solid #eee;">
+                <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
                     <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Joined Date</th>
+                        <tr style="background:#f8f9fa;">
+                            <th style="padding:0.6rem 0.8rem; text-align:left;">ID</th>
+                            <th style="padding:0.6rem 0.8rem; text-align:left;">User ID</th>
+                            <th style="padding:0.6rem 0.8rem; text-align:left;">Name</th>
+                            <th style="padding:0.6rem 0.8rem; text-align:left;">Email</th>
+                            <th style="padding:0.6rem 0.8rem; text-align:left;">Role</th>
+                            <th style="padding:0.6rem 0.8rem; text-align:left;">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="usersTableBody">
-                        <!-- Users will be loaded here -->
+                    <tbody id="adminUsersTableBody">
+                        <tr>
+                            <td colspan="6" style="padding:0.8rem; text-align:center; color:#666;">Loading users...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        // Check if admin is logged in
-        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-        if (!loggedInUser || loggedInUser.role !== 'administrator') {
-            window.location.href = 'login.html';
-        }
+</main>
 
-        let currentFilter = 'all';
+<script>
+  const API_BASE = 'http://localhost:3000';
 
-        // Load all users
-        function loadUsers() {
-            const allUsers = [];
-            
-            // Get all users from localStorage
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('user_')) {
-                    try {
-                        const user = JSON.parse(localStorage.getItem(key));
-                        if (user && user.userid) {
-                            allUsers.push(user);
-                        }
-                    } catch (e) {
-                        console.error('Error parsing user:', e);
-                    }
-                }
-            }
+  function adminLogout() {
+    if (confirm('Logout from admin?')) {
+      sessionStorage.removeItem('loggedInUser');
+      window.location.href = 'login.html';
+    }
+  }
 
-            return allUsers;
-        }
+  async function loadAdminStats() {
+    try {
+      const resp = await fetch(`${API_BASE}/api/admin/stats`);
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to load stats');
 
-        // Calculate statistics
-        function calculateStats(users) {
-            const stats = {
-                total: users.length,
-                students: users.filter(u => u.role === 'student').length,
-                instructors: users.filter(u => u.role === 'instructor').length,
-                analysts: users.filter(u => u.role === 'data_analyst').length
-            };
+      document.getElementById('totalUsers').textContent = (data.totalUsers ?? 0).toLocaleString('en-IN');
+      document.getElementById('totalCourses').textContent = (data.totalCourses ?? 0).toLocaleString('en-IN');
+      document.getElementById('totalEnrollments').textContent = (data.totalEnrollments ?? 0).toLocaleString('en-IN');
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
-            document.getElementById('totalUsers').textContent = stats.total;
-            document.getElementById('totalStudents').textContent = stats.students;
-            document.getElementById('totalInstructors').textContent = stats.instructors;
-            document.getElementById('totalAnalysts').textContent = stats.analysts;
-        }
+  async function loadPendingCourses() {
+    const list = document.getElementById('pendingCoursesList');
+    const empty = document.getElementById('pendingEmpty');
+    list.innerHTML = '';
+    empty.style.display = 'none';
 
-        // Render users table
-        function renderUsers(filter = 'all') {
-            const users = loadUsers();
-            calculateStats(users);
+    try {
+      const resp = await fetch(`${API_BASE}/api/admin/courses/pending`);
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to load pending courses');
 
-            const filteredUsers = filter === 'all' ? users : users.filter(u => u.role === filter);
-            const tbody = document.getElementById('usersTableBody');
+      if (!Array.isArray(data) || data.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
 
-            if (filteredUsers.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            <div class="empty-state">
-                                <div class="empty-icon">👥</div>
-                                <p>No users found</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
+      list.innerHTML = data.map(c => `
+        <div style="background: #fff; border: 1px solid rgba(26,95,111,0.2); border-radius: 12px; padding: 1rem;">
+          <div style="font-weight:700; color:#0a3d4a; margin-bottom:0.25rem;">${c.title}</div>
+          <div style="color:#666; font-size:0.95rem; margin-bottom:0.75rem;">Instructor: ${c.instructor || '-'}</div>
+          <button class="admin-link" style="border:none; width:100%; padding:0.75rem; cursor:pointer;" onclick="approveCourse(${c.id})">✅ Approve</button>
+        </div>
+      `).join('');
+    } catch (e) {
+      console.error(e);
+      empty.style.display = 'block';
+      empty.textContent = 'Unable to load pending courses.';
+    }
+  }
 
-            tbody.innerHTML = filteredUsers.map(user => {
-                const roleClass = `role-${user.role.replace('_', '-')}`;
-                const roleLabel = user.role === 'data_analyst' ? 'Data Analyst' : 
-                                 user.role.charAt(0).toUpperCase() + user.role.slice(1);
-                const joinDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A';
+  async function approveCourse(courseId) {
+    if (!confirm('Approve this course?')) return;
+    try {
+      const resp = await fetch(`${API_BASE}/api/admin/courses/${courseId}/approve`, { method: 'PATCH' });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to approve');
+      await loadPendingCourses();
+      await loadAdminStats();
+      alert('Course approved.');
+    } catch (e) {
+      console.error(e);
+      alert(e.message || 'Failed to approve');
+    }
+  }
 
-                return `
-                    <tr>
-                        <td><strong>${user.userid}</strong></td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td><span class="role-badge ${roleClass}">${roleLabel}</span></td>
-                        <td>${joinDate}</td>
-                    </tr>
-                `;
-            }).join('');
-        }
+  async function loadAdminUsers() {
+    const tbody = document.getElementById('adminUsersTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = `<tr><td colspan="6" style="padding:0.8rem; text-align:center; color:#666;">Loading users...</td></tr>`;
+    try {
+      const resp = await fetch(`${API_BASE}/api/admin/users`);
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to load users');
+      const users = Array.isArray(data) ? data : [];
 
-        // Filter button handlers
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.filter;
-                renderUsers(currentFilter);
-            });
-        });
+      if (!users.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="padding:0.8rem; text-align:center; color:#666;">No users found.</td></tr>`;
+        return;
+      }
 
-        // Logout function
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                sessionStorage.removeItem('loggedInUser');
-                window.location.href = 'index.html';
-            }
-        }
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td style="padding:0.5rem 0.8rem;">${u.id}</td>
+          <td style="padding:0.5rem 0.8rem;">${u.userid}</td>
+          <td style="padding:0.5rem 0.8rem;">${u.name}</td>
+          <td style="padding:0.5rem 0.8rem;">${u.email}</td>
+          <td style="padding:0.5rem 0.8rem;">${u.role}</td>
+          <td style="padding:0.5rem 0.8rem;">
+            <button onclick="adminDeleteUser(${u.id})" style="padding:0.35rem 0.7rem; border-radius:6px; border:none; background:#ff6b6b; color:#fff; font-size:0.8rem; cursor:pointer;">
+              Delete
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      console.error(e);
+      tbody.innerHTML = `<tr><td colspan="6" style="padding:0.8rem; text-align:center; color:#b00020;">Failed to load users.</td></tr>`;
+    }
+  }
 
-        // Initial render
-        renderUsers();
-    </script>
+  async function adminDeleteUser(id) {
+    if (!confirm('Delete this user? This action cannot be undone.')) return;
+    try {
+      const resp = await fetch(`${API_BASE}/api/admin/users/${id}`, { method: 'DELETE' });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to delete user');
+      await loadAdminUsers();
+      await loadAdminStats();
+      alert('User deleted.');
+    } catch (e) {
+      console.error(e);
+      alert(e.message || 'Failed to delete user');
+    }
+  }
+
+  async function adminCreateUser(event) {
+    event.preventDefault();
+    const userid = document.getElementById('newUserId')?.value.trim();
+    const name = document.getElementById('newUserName')?.value.trim();
+    const email = document.getElementById('newUserEmail')?.value.trim();
+    const role = document.getElementById('newUserRole')?.value;
+    const password = document.getElementById('newUserPassword')?.value;
+
+    if (!userid || !name || !email || !role || !password) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    try {
+      const resp = await fetch(`${API_BASE}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userid, name, email, password, role })
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to create user');
+
+      document.getElementById('adminCreateUserForm')?.reset();
+      await loadAdminUsers();
+      await loadAdminStats();
+      alert('User created successfully.');
+    } catch (e) {
+      console.error(e);
+      alert(e.message || 'Failed to create user');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadAdminStats();
+    loadPendingCourses();
+    loadAdminUsers();
+    const form = document.getElementById('adminCreateUserForm');
+    if (form) {
+      form.addEventListener('submit', adminCreateUser);
+    }
+  });
+</script>
+
 </body>
 </html>

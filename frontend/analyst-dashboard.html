@@ -572,11 +572,14 @@
             <li><a href="analytics.html" class="active">Analytics</a></li>
             <li><a href="contact.html">Contact us</a></li>
         </ul>
-        <div class="profile-circle" onclick="window.location.href='analyst-profile.html'">
-            AK
+        <div style="display:flex; align-items:center; gap:1rem;">
+            <div class="profile-circle" onclick="window.location.href='analyst-profile.html'">
+                AK
+            </div>
+            <button onclick="logout()" style="padding:0.6rem 1.2rem; border-radius:999px; border:none; background:#ff6b6b; color:#fff; font-weight:600; cursor:pointer;">
+                Logout
+            </button>
         </div>
-
-
     </nav>
 
     <!-- Dashboard Header -->
@@ -708,119 +711,44 @@
             </div>
         </section>
 
-        <!-- Detailed Analytics Table -->
-        <section class="detailed-analytics">
-            <div class="analytics-header">
-                <h3 class="analytics-title">Detailed Course Analytics</h3>
-                <button class="export-btn" onclick="exportData()">
-                    📊 Export Data
-                </button>
-            </div>
-            <table class="analytics-table">
-                <thead>
-                    <tr>
-                        <th>Course Name</th>
-                        <th>University</th>
-                        <th>Total Enrollments</th>
-                        <th>Active Students</th>
-                        <th>Completion Rate</th>
-                        <th>Avg Time</th>
-                        <th>Rating</th>
-                    </tr>
-                </thead>
-                <tbody id="analyticsTableBody">
-                    <tr>
-                        <td>Introduction to Computer Science</td>
-                        <td>MIT</td>
-                        <td>1,245</td>
-                        <td>892</td>
-                        <td>84.2%</td>
-                        <td>3.8 months</td>
-                        <td>4.8/5</td>
-                    </tr>
-                    <tr>
-                        <td>Business Analytics</td>
-                        <td>Stanford</td>
-                        <td>987</td>
-                        <td>723</td>
-                        <td>76.5%</td>
-                        <td>4.1 months</td>
-                        <td>4.6/5</td>
-                    </tr>
-                    <tr>
-                        <td>Machine Learning Fundamentals</td>
-                        <td>Berkeley</td>
-                        <td>1,567</td>
-                        <td>1,134</td>
-                        <td>72.3%</td>
-                        <td>5.2 months</td>
-                        <td>4.9/5</td>
-                    </tr>
-                    <tr>
-                        <td>Digital Marketing</td>
-                        <td>Harvard</td>
-                        <td>2,341</td>
-                        <td>1,789</td>
-                        <td>81.7%</td>
-                        <td>3.5 months</td>
-                        <td>4.7/5</td>
-                    </tr>
-                    <tr>
-                        <td>Data Science Bootcamp</td>
-                        <td>Oxford</td>
-                        <td>876</td>
-                        <td>654</td>
-                        <td>74.7%</td>
-                        <td>6.1 months</td>
-                        <td>4.8/5</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        <!-- Detailed Analytics Table (removed as per requirements) -->
     </main>
 
     <script>
-        // Sample data - this will be replaced with actual database calls
-        let analyticsData = {
-            totalEnrollments: 25847,
-            activeEnrollments: 18245,
-            completionRate: 78.5,
-            avgCompletionTime: 4.2,
-            enrollmentTrend: [
-                { month: 'Jan', enrollments: 1200, completions: 950 },
-                { month: 'Feb', enrollments: 1450, completions: 1100 },
-                { month: 'Mar', enrollments: 1650, completions: 1280 },
-                { month: 'Apr', enrollments: 1890, completions: 1450 },
-                { month: 'May', enrollments: 2100, completions: 1650 },
-                { month: 'Jun', enrollments: 2350, completions: 1890 }
-            ],
-            courseCompletion: [
-                { course: 'Computer Science', rate: 84.2 },
-                { course: 'Business', rate: 76.5 },
-                { course: 'Engineering', rate: 72.3 },
-                { course: 'Arts', rate: 81.7 },
-                { course: 'Science', rate: 74.7 }
-            ]
-        };
+        const API_BASE = 'http://localhost:3000';
+        let analyticsData = null;
+        let enrollmentChartInstance = null;
+        let completionChartInstance = null;
 
         // Initialize Charts
         function initializeCharts() {
-            // Enrollment Chart
+            if (!analyticsData) return;
+
+            const trend = analyticsData.enrollmentTrend || [];
+            const courseStats = analyticsData.courseStats || [];
+
+            const labels = trend.map(item => item.month);
+            const enrollments = trend.map(item => item.enrollments);
+            const completions = trend.map(item => item.completions);
+
             const enrollmentCtx = document.getElementById('enrollmentChart').getContext('2d');
-            new Chart(enrollmentCtx, {
+            if (enrollmentChartInstance) {
+                enrollmentChartInstance.destroy();
+            }
+            enrollmentChartInstance = new Chart(enrollmentCtx, {
                 type: 'line',
                 data: {
-                    labels: analyticsData.enrollmentTrend.map(item => item.month),
+                    labels,
                     datasets: [{
                         label: 'New Enrollments',
-                        data: analyticsData.enrollmentTrend.map(item => item.enrollments),
+                        data: enrollments,
                         borderColor: '#1a5f6f',
                         backgroundColor: 'rgba(26, 95, 111, 0.1)',
                         tension: 0.4,
                         fill: true
                     }, {
                         label: 'Completions',
-                        data: analyticsData.enrollmentTrend.map(item => item.completions),
+                        data: completions,
                         borderColor: '#f4a945',
                         backgroundColor: 'rgba(244, 169, 69, 0.1)',
                         tension: 0.4,
@@ -853,13 +781,16 @@
 
             // Completion Rate Chart
             const completionCtx = document.getElementById('completionChart').getContext('2d');
-            new Chart(completionCtx, {
+            if (completionChartInstance) {
+                completionChartInstance.destroy();
+            }
+            completionChartInstance = new Chart(completionCtx, {
                 type: 'bar',
                 data: {
-                    labels: analyticsData.courseCompletion.map(item => item.course),
+                    labels: courseStats.map(item => item.name),
                     datasets: [{
                         label: 'Completion Rate (%)',
-                        data: analyticsData.courseCompletion.map(item => item.rate),
+                        data: courseStats.map(item => item.completionRate),
                         backgroundColor: [
                             '#28a745',
                             '#17a2b8',
@@ -902,6 +833,68 @@
             });
         }
 
+        function updateStatCards(fromCourseSubset) {
+            const data = analyticsData;
+            if (!data) return;
+
+            const totalEnrollmentsEl = document.getElementById('totalEnrollments');
+            const activeEnrollmentsEl = document.getElementById('activeEnrollments');
+            const completionRateEl = document.getElementById('completionRate');
+            const avgCompletionTimeEl = document.getElementById('avgCompletionTime');
+
+            let totalEnrollments = data.totalEnrollments;
+            let activeEnrollments = data.activeEnrollments;
+            let completionRate = data.completionRate;
+            let avgTime = data.avgCompletionTime;
+
+            if (fromCourseSubset && fromCourseSubset.length > 0) {
+                const total = fromCourseSubset.reduce((sum, c) => sum + (c.totalEnrollments || 0), 0);
+                const active = fromCourseSubset.reduce((sum, c) => sum + (c.activeStudents || 0), 0);
+                const completed = fromCourseSubset.reduce((sum, c) => sum + (c.completedStudents || 0), 0);
+                const weightedTime = fromCourseSubset.reduce(
+                    (sum, c) => sum + (c.avgTimeMonths || 0) * (c.completedStudents || 0),
+                    0
+                );
+
+                totalEnrollments = total;
+                activeEnrollments = active;
+                completionRate = total > 0 ? (completed * 100.0) / total : 0;
+                avgTime = completed > 0 ? weightedTime / completed : 0;
+            }
+
+            totalEnrollmentsEl.textContent = (totalEnrollments || 0).toLocaleString('en-IN');
+            activeEnrollmentsEl.textContent = (activeEnrollments || 0).toLocaleString('en-IN');
+            completionRateEl.textContent = `${completionRate.toFixed(1)}%`;
+            avgCompletionTimeEl.textContent = avgTime.toFixed(1);
+        }
+
+        function renderAnalyticsTable(courseSubset) {
+            const tableBody = document.getElementById('analyticsTableBody');
+            if (!analyticsData || !tableBody) return;
+            const rows = courseSubset || analyticsData.courseStats || [];
+
+            if (!rows.length) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; color:#666;">No course analytics available.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = rows.map(row => `
+                <tr>
+                    <td>${row.name}</td>
+                    <td>${row.university || '-'}</td>
+                    <td>${(row.totalEnrollments || 0).toLocaleString('en-IN')}</td>
+                    <td>${(row.activeStudents || 0).toLocaleString('en-IN')}</td>
+                    <td>${(row.completionRate || 0).toFixed(1)}%</td>
+                    <td>${(row.avgTimeMonths || 0).toFixed(1)} months</td>
+                    <td>${(row.rating || 0).toFixed(1)}/5</td>
+                </tr>
+            `).join('');
+        }
+
         // Apply Filters Function
         function applyFilters() {
             const filterBtn = document.getElementById('filterBtnText');
@@ -915,10 +908,8 @@
             const universityFilter = document.getElementById('universityFilter').value;
             const dateFilter = document.getElementById('dateFilter').value;
             
-            // Simulate API call with timeout
+            // For now, filters are applied client-side on already-fetched analyticsData
             setTimeout(() => {
-                // Here you would make actual API calls to your backend
-                // For now, we'll just simulate updating the data
                 updateDashboardData(courseFilter, universityFilter, dateFilter);
                 
                 // Reset button
@@ -929,40 +920,26 @@
             }, 1500);
         }
 
-        // Update Dashboard Data
+        // Update Dashboard Data (client-side filtering on courseStats)
         function updateDashboardData(course, university, dateRange) {
-            // This function will be connected to your database
-            // For now, it simulates data updates
-            
-            // Update stat cards with filtered data
-            const multiplier = Math.random() * 0.3 + 0.85; // Random variation for demo
-            
-            document.getElementById('totalEnrollments').textContent = 
-                Math.floor(analyticsData.totalEnrollments * multiplier).toLocaleString();
-            document.getElementById('activeEnrollments').textContent = 
-                Math.floor(analyticsData.activeEnrollments * multiplier).toLocaleString();
-            document.getElementById('completionRate').textContent = 
-                (analyticsData.completionRate * multiplier).toFixed(1) + '%';
-            document.getElementById('avgCompletionTime').textContent = 
-                (analyticsData.avgCompletionTime * (2 - multiplier)).toFixed(1);
-            
-            // Update table data
-            updateAnalyticsTable(course, university);
-        }
+            if (!analyticsData) return;
+            const all = analyticsData.courseStats || [];
 
-        // Update Analytics Table
-        function updateAnalyticsTable(courseFilter, universityFilter) {
-            const tableBody = document.getElementById('analyticsTableBody');
-            // Here you would filter the table data based on selected filters
-            // For demo purposes, we'll just add a visual indication
-            
-            const rows = tableBody.querySelectorAll('tr');
-            rows.forEach(row => {
-                row.style.opacity = '0.5';
-                setTimeout(() => {
-                    row.style.opacity = '1';
-                }, 300);
+            const normalizedCourse = (course || '').toLowerCase();
+            const normalizedUni = (university || '').toLowerCase();
+
+            const subset = all.filter(row => {
+                const courseMatch =
+                    !normalizedCourse ||
+                    (row.name && row.name.toLowerCase().includes(normalizedCourse));
+                const uniMatch =
+                    !normalizedUni ||
+                    (row.university && row.university.toLowerCase().includes(normalizedUni));
+                return courseMatch && uniMatch;
             });
+
+            updateStatCards(subset);
+            renderAnalyticsTable(subset);
         }
 
         // Export Data Function
@@ -1016,20 +993,41 @@
         `;
         document.head.appendChild(style);
 
-        // Auto-refresh data every 30 seconds
+        // Auto-refresh data every 30 seconds (re-fetch from backend)
         function startAutoRefresh() {
             setInterval(() => {
-                // Only refresh if no filters are currently being applied
                 const filterBtn = document.getElementById('filterBtnText');
                 if (filterBtn.textContent === 'Apply Filters') {
-                    updateDashboardData('', '', 'current');
+                    fetchAnalyticsOverview();
                 }
             }, 30000);
         }
 
+        async function fetchAnalyticsOverview() {
+            try {
+                const resp = await fetch(`${API_BASE}/api/admin/analytics/overview`);
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data?.message || 'Failed to load analytics');
+                analyticsData = data;
+                updateStatCards();
+                initializeCharts();
+                renderAnalyticsTable();
+            } catch (err) {
+                console.error(err);
+                showNotification('Failed to load analytics overview.', 'error');
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('loggedInUser');
+                window.location.href = 'login.html';
+            }
+        }
+
         // Initialize Dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            initializeCharts();
+            fetchAnalyticsOverview();
             startAutoRefresh();
             
             // Add smooth transitions

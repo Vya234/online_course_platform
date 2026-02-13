@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Courses - LearnX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'DM Sans', sans-serif; background:#f8f9fa; margin:0; }
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:1.2rem 5%; background:#0a3d4a; color:#fff; }
+    .logo { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; }
+    .container { max-width:1200px; margin:0 auto; padding:2rem 5%; }
+    .card { background:#fff; border:1px solid rgba(26,95,111,0.2); border-radius:16px; padding:1.5rem; box-shadow:0 8px 25px rgba(0,0,0,0.08); margin-bottom:1.5rem; }
+    .title { font-family:'Playfair Display',serif; font-size:1.8rem; margin:0 0 0.5rem; color:#0a3d4a; }
+    .muted { color:#666; margin:0 0 1rem; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:0.9rem; border-bottom:1px solid #eee; text-align:left; }
+    th { color:#0a3d4a; font-weight:700; }
+    .btn { padding:0.55rem 0.9rem; border-radius:10px; border:none; cursor:pointer; font-weight:700; }
+    .btn-approve { background:linear-gradient(135deg,#1a5f6f,#7ec4c4); color:#fff; }
+    .pill { display:inline-block; padding:0.25rem 0.6rem; border-radius:999px; font-size:0.85rem; font-weight:700; }
+    .pill-pending { background:#fff3cd; color:#856404; }
+    .pill-approved { background:#d4edda; color:#155724; }
+    .row { display:flex; gap:1rem; flex-wrap:wrap; }
+    .half { flex: 1 1 520px; }
+    pre { background:#0a3d4a; color:#fff; padding:1rem; border-radius:12px; overflow:auto; }
+    .table-wrapper { max-height:380px; overflow:auto; border-radius:12px; border:1px solid #ddd; background:#fff; }
+    .data-table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .data-table th, .data-table td { padding:0.6rem 0.75rem; border-bottom:1px solid #eee; }
+    .data-table th { position:sticky; top:0; background:#f1f3f5; z-index:1; }
+    select { padding:0.6rem; border-radius:10px; border:1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">LearnX Admin</div>
+    <a href="admin-dashboard.html" style="color:#fff; text-decoration:none; font-weight:700;">Back</a>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="card half">
+        <h2 class="title">Pending Courses</h2>
+        <p class="muted">Approve instructor-created courses so students can see them.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Instructor</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="pendingBody"></tbody>
+        </table>
+        <div id="pendingEmpty" class="muted" style="display:none;">No pending courses.</div>
+      </div>
+
+      <div class="card half">
+        <h2 class="title">View Database</h2>
+        <p class="muted">Quick read-only view of key tables.</p>
+        <div style="display:flex; gap:0.75rem; align-items:center; margin-bottom:1rem;">
+          <select id="tableSelect"></select>
+          <button class="btn btn-approve" onclick="loadTable()">Load</button>
+        </div>
+        <div id="tableOutput" class="table-wrapper">
+          <div class="muted" style="padding:0.75rem;">Select a table and click Load.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+
+    async function loadPending() {
+      const body = document.getElementById('pendingBody');
+      const empty = document.getElementById('pendingEmpty');
+      body.innerHTML = '';
+      empty.style.display = 'none';
+
+      const resp = await fetch(`${API_BASE}/api/admin/courses/pending`);
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to load pending');
+
+      if (!Array.isArray(data) || data.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      body.innerHTML = data.map(c => `
+        <tr>
+          <td>
+            <div style="font-weight:800; color:#0a3d4a;">${c.title}</div>
+            <div style="color:#666; font-size:0.9rem;">${c.description || ''}</div>
+          </td>
+          <td>${c.instructor || '-'}</td>
+          <td><span class="pill pill-pending">pending</span></td>
+          <td><button class="btn btn-approve" onclick="approve(${c.id})">Approve</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function approve(id) {
+      if (!confirm('Approve this course?')) return;
+      const resp = await fetch(`${API_BASE}/api/admin/courses/${id}/approve`, { method: 'PATCH' });
+      const data = await resp.json();
+      if (!resp.ok) return alert(data?.message || 'Failed to approve');
+      await loadPending();
+      alert('Approved.');
+    }
+
+    async function loadTables() {
+      const select = document.getElementById('tableSelect');
+      const resp = await fetch(`${API_BASE}/api/admin/db/tables`);
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || 'Failed to load tables');
+      select.innerHTML = data.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+
+    async function loadTable() {
+      const table = document.getElementById('tableSelect').value;
+      const out = document.getElementById('tableOutput');
+      out.innerHTML = '<div class="muted" style="padding:0.75rem;">Loading...</div>';
+      const resp = await fetch(`${API_BASE}/api/admin/db/${encodeURIComponent(table)}?limit=50`);
+      const data = await resp.json();
+      if (!resp.ok) {
+        out.innerHTML = `<div class="muted" style="padding:0.75rem;">${data?.message || 'Failed to load data.'}</div>`;
+        return;
+      }
+      if (!Array.isArray(data) || data.length === 0) {
+        out.innerHTML = '<div class="muted" style="padding:0.75rem;">No rows found for this table.</div>';
+        return;
+      }
+      const cols = Object.keys(data[0]);
+      const header = cols.map(c => `<th>${c}</th>`).join('');
+      const rows = data.map(row => `
+        <tr>
+          ${cols.map(c => `<td>${row[c] != null ? row[c] : ''}</td>`).join('')}
+        </tr>
+      `).join('');
+      out.innerHTML = `
+        <table class="data-table">
+          <thead><tr>${header}</tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await loadPending();
+        await loadTables();
+      } catch (e) {
+        console.error(e);
+        alert('Failed to load admin course management.');
+      }
+    });
+  </script>
+</body>
+</html>
+

@@ -187,7 +187,12 @@
             <div class="logo-icon">🎓</div>
             <span class="logo-text">LearnX</span>
         </div>
-        <a href="student-dashboard.html" class="back-btn">Back to Dashboard</a>
+        <div style="display:flex; gap:1rem; align-items:center;">
+            <a href="student-dashboard.html" class="back-btn">Back to Dashboard</a>
+            <button onclick="logout()" class="back-btn" style="background:#ff6b6b; border-color:#ff6b6b;">
+                Logout
+            </button>
+        </div>
     </nav>
 
     <div class="profile-container">
@@ -257,6 +262,13 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('loggedInUser');
+                window.location.href = 'login.html';
+            }
         }
     </script>
 </body>
