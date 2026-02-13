@@ -116,41 +116,23 @@ Secure Route Protection
 📂 Project Structure (Suggested)
 
 online_course_platform/
-
 │
-
 ├── frontend/
-
 │   ├── index.html
-
 │   ├── dashboard.html
-
 │   └── assets/
-
 │
-
 ├── backend/
-
 │   ├── controllers/
-
 │   ├── routes/
-
 │   ├── models/
-
 │   ├── middleware/
-
 │   └── app.js
-
 │
-
 ├── database/
-
 │   ├── schema.sql
-
 │   └── seed.sql
-
 │
-
 └── README.md
 
 ⚙️ How to Run the Project
@@ -220,3 +202,4 @@ Amrutha D
 Koncha Lavanya
 
 Bhumika Rishitha M
+
