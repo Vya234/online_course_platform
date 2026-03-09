@@ -1,223 +1,184 @@
-🎓 Online Course Platform
+## Online Course Management Platform
 
-A full-stack academic course management system designed to manage universities, courses, instructors, students, administrators, and data analysts using a centralized relational database.
+A web-based information system for managing an online course platform.
+The system supports multiple user roles — **administrator, instructor, student, and data analyst** — allowing the management of courses, users, enrollments, and analytics through a unified interface.
 
-This project was developed as part of the Database Management Systems (DBMS) Mini Project – IIT Kharagpur.
-It demonstrates advanced database modeling, authentication, and modular backend architecture. 
+This project was developed as part of a **Database Management Systems laboratory assignment**, focusing on designing a relational database and integrating it with a full web-based system.
 
-** Features **
+---
 
-👩‍🎓 Student
+### Screenshots
 
--> Enroll in courses
+#### Homepage
 
--> Track progress & completion
+![Homepage](./screenshots/homepage.png)
 
--> View grades and feedback
+#### Login
 
--> Dashboard access
+![Login](./screenshots/login.png)
 
-👨‍🏫 Instructor
+#### Student Dashboard
 
--> Upload course content
+![Student Dashboard](./screenshots/student-dashboard.png)
 
--> Manage materials
+#### Admin Dashboard
 
--> Track student performance
+![Admin Dashboard](./screenshots/admin-dashboard.png)
 
-🛠 Administrator
+#### Analyst Dashboard
 
--> Manage users
+![Analyst Dashboard](./screenshots/analyst-dashboard.png)
 
--> Assign roles
+---
 
--> Control permissions
+### Stack
 
-📊 Data Analyst
+* **Frontend**: HTML, CSS, JavaScript
+* **Backend**: Node.js, Express
+* **Database**: PostgreSQL
 
--> Course analytics
+---
 
--> Enrollment trends
+### Features
 
--> Completion statistics
+**Authentication**
 
--> Performance metrics dashboard
+* User registration and login.
+* Role-based access control for different system users.
 
-🧠 Core Concepts Implemented
+**Courses**
 
-ISA Hierarchy (User → Student / Instructor / Admin / Analyst)
+* Browse and search available courses.
+* View course details and content.
+* Register for courses.
 
-Many-to-Many Relationships
-Associative Entities
+**Instructor management**
 
-Derived Statistics Engine
+* Instructors can manage assigned courses.
+* Ability to add or update course content.
 
-Role-Based Access Control (RBAC)
+**Admin controls**
 
-Secure Authentication using JWT
+* Manage platform users.
+* Assign instructors to courses.
+* Add or remove students from the system.
+* Manage course offerings.
 
-Password Hashing with bcrypt
+**Analytics**
 
-Normalized Relational Database Design
+* Data analysts can view statistics related to course enrollments and platform usage.
 
-🏗 System Architecture
+---
 
-Three-Tier Architecture :
-Client Layer → Application Layer → Database Layer
+### Architecture
 
-Frontend: Static web dashboards
+```text
+Client (HTML/CSS/JS)
+        |
+ REST API
+        |
+ Node.js + Express
+        |
+ PostgreSQL
+```
 
-Backend: RESTful APIs
+---
 
-Database: PostgreSQL relational schema
+### Database Design
 
-🛠 Tech Stack
+The system uses **PostgreSQL** as the relational database for managing platform data.
 
-** Frontend **
- 
-    HTML5
-    CSS3
+The database schema models entities such as:
 
-** Backend **
+* Users
+* Courses
+* Instructors
+* Students
+* Enrollments
+* Course content
 
-    Node.js
-    JWT Authentication
-    bcrypt
-    dotenv
+During development we worked on:
 
-** Database **
+* ER diagram design
+* Relational schema creation
+* Table relationships and normalization
+* Writing SQL queries for data retrieval and updates
+* Integrating PostgreSQL with the backend server
 
-    PostgreSQL
+---
 
-🗄 Database Design Highlights
+### Project structure
 
-User Superclass with Specialized Roles
-
-University–Course Relationship
-
-Enrollment (Many-to-Many)
-
-Teaching Assignment Model
-
-Course Content Storage
-
-Statistics Engine for Derived Metrics
-
-🔐 Authentication & Security
-
-Password Hashing using bcrypt
-
-JWT Token-Based Authentication
-
-Role-Based Access Control
-
-Secure Route Protection
-
-📂 Project Structure (Suggested)
-
+```text
 online_course_platform/
-
+├── backend
+│   ├── db.js
+│   ├── server.js
+│   ├── routes.admin.js
+│   ├── routes.auth.js
+│   ├── routes.courses.js
+│   ├── routes.instructors.js
+│   └── routes.students.js
 │
-
-├── frontend/
-
+├── frontend
+│   ├── js
+│   ├── add_course.html
+│   ├── admin-dashboard.html
+│   ├── analyst-dashboard.html
+│   ├── analyst-profile.html
+│   ├── course-content.html
+│   ├── course-page.html
+│   ├── course.html
+│   ├── courses.html
 │   ├── index.html
-
-│   ├── dashboard.html
-
-│   └── assets/
-
+│   ├── instructor-dashboard.html
+│   ├── login.html
+│   ├── manage-courses.html
+│   ├── manage-users.html
+│   ├── register.html
+│   ├── signup.html
+│   ├── student-dashboard.html
+│   ├── student-profile.html
+│   └── style.css
 │
-
-├── backend/
-
-│   ├── controllers/
-
-│   ├── routes/
-
-│   ├── models/
-
-│   ├── middleware/
-
-│   └── app.js
-
-│
-
-├── database/
-
-│   ├── schema.sql
-
-│   └── seed.sql
-
-│
-
 └── README.md
+```
 
-⚙️ How to Run the Project
-1. Clone Repository
-git clone https://github.com/Vya234/online_course_platform.git
+---
 
-cd online_course_platform
+### Running locally
 
-2. Backend Setup
+**Backend**
 
+```bash
 cd backend
-
 npm install
+node server.js
+```
 
-npm start
+**Frontend**
 
-3. Database Setup
+Open `frontend/index.html` in your browser.
 
-Install PostgreSQL
+---
 
-Create database:
+### Learning outcomes
 
-CREATE DATABASE online_course_db;
+Through this project we gained experience in:
 
-Run schema scripts.
+* Designing relational databases using **PostgreSQL**
+* Creating ER diagrams and relational schemas
+* Writing SQL queries for real-world applications
+* Building backend APIs with **Node.js and Express**
+* Connecting frontend interfaces with backend services
+* Developing a role-based web information system
 
-4. Frontend
+---
 
-Open index.html in browser.
+### Group members
 
-📈 Functional Modules
-
-Course Management
-
-Enrollment Module
-
-Instructor Module
-
-Administrator Panel
-
-Analyst Dashboard
-
-🎯 Learning Outcomes
-
-Advanced ER Modeling
-
-PostgreSQL Query Design
-
-Secure API Development
-
-Modular Backend Structure
-
-Full-Stack Integration
-
-📌 Conclusion
-
-This project demonstrates scalable database architecture, secure authentication mechanisms, and modular system design suitable for academic as well as real-world expansion.
-
-👥 Team
-
-Kavya Rai
-
-Pravallika C
-
-Amrutha D
-
-Koncha Lavanya
-
-Bhumika Rishitha M
-
+* Kavya Rai
+* Pravallika C
+* Bhumika Rishitha M
+* Amrutha D
+* Koncha Lavanya 
