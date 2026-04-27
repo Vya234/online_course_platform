@@ -9,25 +9,30 @@ This project was developed as part of a **Database Management Systems laboratory
 
 ### Screenshots
 
-#### Homepage
-
-![Homepage](./screenshots/homepage.png)
-
-#### Login
+### Login
 
 ![Login](./screenshots/login.png)
 
-#### Student Dashboard
+### Student Dashboard
 
 ![Student Dashboard](./screenshots/student-dashboard.png)
 
-#### Admin Dashboard
+<details>
+<summary><strong>More screenshots</strong></summary>
+
+### Homepage
+
+![Homepage](./screenshots/homepage.png)
+
+### Admin Dashboard
 
 ![Admin Dashboard](./screenshots/admin-dashboard.png)
 
-#### Analyst Dashboard
+### Analyst Dashboard
 
 ![Analyst Dashboard](./screenshots/analyst-dashboard.png)
+
+</details>
 
 ---
 
